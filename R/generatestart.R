@@ -496,10 +496,11 @@ generate.start.rowcluster <- function(long.df, model, model_structure, RG,
 
             new.lli <- init.out$EM.status$best.lli
             if (new.lli > best.lli) {
-                cat(paste("Found better incomplete LL:",new.lli,"\n"))
+                cat(paste("Found better incomplete LL!:",new.lli,"\n"))
                 best.lli <- new.lli
                 best.initvect.pi.init <- list(initvect=init.out$outvect,pi.init=init.out$pi.out)
                 initvect <- init.out$outvect
+                cat(paste("init.out$outvect:",init.out$outvect,"\n"))
             }
         }
     }

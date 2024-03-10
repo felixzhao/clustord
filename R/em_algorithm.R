@@ -21,6 +21,8 @@ update.EM.status <- function(EM.status, new.llc, new.lli, invect, outvect,
     finished <- FALSE
     converged <- FALSE
 
+    # looks like the EM.status save the log-likelihood 
+    # seems it used to eval when EM-algo should stop
     if (new.lli > EM.status$best.lli) {
         best.lli <- new.lli
         llc.for.best.lli <- new.llc
@@ -122,6 +124,18 @@ run.EM.rowcluster <- function(invect, model, long.df, rowc_mm, colc_mm, cov_mm,
 
     while(!EM.status$finished)
     {
+        # Estep
+        # this step is put element into compoments, 
+        # thus, we can directlly call it, when we have the M step output
+
+        # idea: then we can save M step output into file
+
+        # serialize ppr_m into rds file.
+        # the sample code
+        # > x <- "Hello, world!"
+        # > saveRDS(x, file = "my_object.rds")
+        # > y <- readRDS(file = "my_object.rds")
+        # > y
         ppr_m <- rcpp_Rcluster_Estep(invect, model_num,
                                      ydf, rowc_mm, colc_mm, cov_mm,
                                      pi_v, param_lengths_num,
@@ -152,7 +166,8 @@ run.EM.rowcluster <- function(invect, model, long.df, rowc_mm, colc_mm, cov_mm,
                            method=optim.method,
                            hessian=F,control=optim.control)
 
-        # print(optim.fit$counts)
+        print("OPTIM")
+        print(optim.fit$counts)
 
         outvect <- optim.fit$par
 

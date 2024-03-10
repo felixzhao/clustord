@@ -166,8 +166,7 @@ run.EM.rowcluster <- function(invect, model, long.df, rowc_mm, colc_mm, cov_mm,
                            method=optim.method,
                            hessian=F,control=optim.control)
 
-        print("OPTIM")
-        print(optim.fit$counts)
+        # print(optim.fit$counts)
 
         outvect <- optim.fit$par
 
@@ -217,7 +216,18 @@ run.EM.rowcluster <- function(invect, model, long.df, rowc_mm, colc_mm, cov_mm,
         # cat("parlist.out\n")
         # print(parlist.out)
         # cat("pi",pi_v,"\n")
+        cat(paste("RG:", RG,"\n"))
     }
+
+    # generate final_parameters of each components from EM_algorithm
+    final_parameters <- list(
+    pi = pi_v, # Final mixing coefficients
+    parameters = unpack_parvec(outvect, model=model, param_lengths=param_lengths,
+                                n, p, q, RG, CG=NULL,
+                                constraint_sum_zero=constraint_sum_zero)
+    )
+
+    cat(paste("final_parameters:", final_parameters,"\n"))
 
     # Find cluster groupings:
     Rclus <- assignments(ppr_m)

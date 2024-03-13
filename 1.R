@@ -30,16 +30,10 @@ print(results$outvect)
 # print(results$EM.status$params.for.best.lli$pi)
 
 # Function to predict category for new observations (placeholder, modify as needed)
-predict_category <- function(predictors, mu, phi) {
-  # This function should implement the calculation of probabilities for each category
-  # based on the ordinal stereotype model parameters and predictors.
-  # For demonstration, this is a placeholder showing structure rather than implementation.
-  
+predict_category <- function(predictors, mu, phi) {  
   num_obs <- nrow(predictors)
-  num_categories <- length(mu) + 1  # Assuming mu separates categories
-  
-  # Placeholder: compute probabilities for each category for each observation
-  # Actual computation will depend on the specifics of your model and parameters
+  num_categories <- length(mu) + 1  # mu separates categories
+
   probabilities <- matrix(runif(num_obs * num_categories), nrow=num_obs, ncol=num_categories)
   probabilities <- sweep(probabilities, 1, rowSums(probabilities), "/")  # Normalize to sum to 1
   
@@ -79,30 +73,40 @@ predict_category <- function(predictors, mu, phi) {
 # }
 
 
-predict_category_3 <- function(predictors, mu, coefficients) {
-  num_obs <- nrow(predictors)
-  num_categories <- length(mu) + 1
+# predict_category_3 <- function(predictors, mu, coefficients) {
+#   num_obs <- nrow(predictors)
+#   num_categories <- length(mu) + 1
   
-  # Construct the linear predictor from your predictors and their coefficients
-  linear_predictor <- predictors %*% coefficients
+#   # Construct the linear predictor from your predictors and their coefficients
+#   linear_predictor <- predictors %*% coefficients
   
-  # Compute cumulative probabilities for each threshold
-  cumulative_probabilities <- matrix(NA, nrow = num_obs, ncol = length(mu))
-  for (i in 1:length(mu)) {
-    cumulative_probabilities[, i] <- plogis(mu[i] - linear_predictor)
-  }
+#   # Compute cumulative probabilities for each threshold
+#   cumulative_probabilities <- matrix(NA, nrow = num_obs, ncol = length(mu))
+#   for (i in 1:length(mu)) {
+#     cumulative_probabilities[, i] <- plogis(mu[i] - linear_predictor)
+#   }
   
-  # Convert cumulative probabilities to category probabilities
-  probabilities <- matrix(0, nrow = num_obs, ncol = num_categories)
-  probabilities[,1] <- cumulative_probabilities[,1]
-  for (i in 2:(num_categories-1)) {
-    probabilities[,i] <- cumulative_probabilities[,i] - cumulative_probabilities[,(i-1)]
-  }
-  probabilities[,num_categories] <- 1 - cumulative_probabilities[,(num_categories-1)]
+#   # Convert cumulative probabilities to category probabilities
+#   probabilities <- matrix(0, nrow = num_obs, ncol = num_categories)
+#   probabilities[,1] <- cumulative_probabilities[,1]
+#   for (i in 2:(num_categories-1)) {
+#     probabilities[,i] <- cumulative_probabilities[,i] - cumulative_probabilities[,(i-1)]
+#   }
+#   probabilities[,num_categories] <- 1 - cumulative_probabilities[,(num_categories-1)]
   
-  predicted_categories <- apply(probabilities, 1, which.max)
+#   predicted_categories <- apply(probabilities, 1, which.max)
   
-  return(predicted_categories)
+#   return(predicted_categories)
+# }
+
+predict_category_5 <- function(predictors, mu, phi) {
+    linear_predictors <- sapply(phi, function(x) predictors * x)
+
+    probabilities <- apply(linear_predictors, 2, function(x) plogis(mu - x))
+
+    predicted_categories <- apply(probabilities, 1, which.max)
+
+    predicted_categories
 }
 
 
@@ -121,8 +125,8 @@ cat("\n")
 
 
 # Predict categories for new observations
-# predicted_categories <- predict_category(new_obs_predictors, mu, phi)
-predicted_categories <- predict_category_3(new_obs_predictors, mu, coefficients)
+predicted_categories <- predict_category(new_obs_predictors, mu, phi)
+# predicted_categories <- predict_category_3(new_obs_predictors, mu, coefficients)
 
 cat("predictions")
 print(predicted_categories)

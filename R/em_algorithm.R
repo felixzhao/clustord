@@ -126,9 +126,31 @@ run.EM.rowcluster <- function(invect, model, long.df, rowc_mm, colc_mm, cov_mm,
                                      ydf, rowc_mm, colc_mm, cov_mm,
                                      pi_v, param_lengths_num,
                                      RG, p, n, q, epsilon, constraint_sum_zero)
+        # cat("ppr_m is of type:", class(ppr_m), "\n")
+        # cat('ppr_m')
+        # # cat(ppr_m)
+        # print(ppr_m)
+        # cat('\n')
+
+        # cat('pi_v')
+        # print(pi_v)
+        # cat('\n')
+
+        # cat("RG:", RG,"p:", p, "n",n,"q",q, "\n")
+
+        # cat('invect')
+        # print(invect)
+        # cat('\n')
+
+        # cat('ydf')
+        # print(ydf)
+        # cat('\n')
 
         ## Now set any NA values in the posterior probabilities matrix to 0
         ppr_m[is.na(ppr_m)] <- 0
+
+        # cat('\n')
+        # cat(paste('ppr_m_1=',ppr_m,'\n'))
 
         pi_v <- colMeans(ppr_m)
 
@@ -203,6 +225,25 @@ run.EM.rowcluster <- function(invect, model, long.df, rowc_mm, colc_mm, cov_mm,
         # print(parlist.out)
         # cat("pi",pi_v,"\n")
     }
+
+    # experiment
+
+    # ydf1 <- ydf[1:3, ]
+    # ydf1[, 1] <- 0                  # Set all elements in column 1 to 0
+    # ydf1[2, 2] <- 30                # Set the element in row 2, column 2 to 30
+
+    # cat('ydf1')
+    # print(ydf1)
+
+    # ppr_m_1 <- rcpp_Rcluster_Estep(invect, model_num,
+    #                                  ydf1, rowc_mm, colc_mm, cov_mm,
+    #                                  pi_v, param_lengths_num,
+    #                                  RG, p, n, q, epsilon, constraint_sum_zero)
+
+    #  cat('ppr_m_1')
+    # print(ppr_m_1)
+
+    # end
 
     # Find cluster groupings:
     Rclus <- assignments(ppr_m)

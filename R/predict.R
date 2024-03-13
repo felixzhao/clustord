@@ -24,14 +24,14 @@ predict_cluster <- function(new_observation, final_parameters) {
 }
 
 # Example usage
-new_observation <- 0.5 # Example new observation
-final_parameters <- list(
-  pi=c(0.0904054993015109, 0.630375222872896, 0.279219277825593),
-  parameters=list(
-    mu=c(0, 0.656703919589771, 0.446979919400921),
-    phi=c(0, 0.999999823124001, 1)
-  )
-)
+# new_observation <- 0.5 # Example new observation
+# final_parameters <- list(
+#   pi=c(0.0904054993015109, 0.630375222872896, 0.279219277825593),
+#   parameters=list(
+#     mu=c(0, 0.656703919589771, 0.446979919400921),
+#     phi=c(0, 0.999999823124001, 1)
+#   )
+# )
 
-predicted_cluster <- predict_cluster(new_observation, final_parameters)
-print(predicted_cluster)
+# predicted_cluster <- predict_cluster(new_observation, final_parameters)
+# print(predicted_cluster)

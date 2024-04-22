@@ -1,0 +1,41 @@
+
+```{r, include=FALSE}
+?mat2df
+```
+
+```{r}
+# Load necessary library
+library(ggplot2)
+```
+
+```{r}
+# Load the data from the CSV file
+df <- read.csv("discrete_mixture_data.csv", stringsAsFactors = FALSE)["value"]
+
+# Check the structure of the loaded data
+str(df)
+
+# View the first few rows of the data
+head(df)
+```
+
+```{r}
+# Assume df is your original dataframe
+set.seed(123)  # for reproducibility
+indexes <- sample(1:nrow(df), size = 0.7 * nrow(df))
+
+train_df <- df[indexes, ]
+test_df <- df[-indexes, ]
+
+```
+
+```{r}
+train_clust_df <- mat2df(mat = train_df)
+
+str(train_clust_df)
+
+test_clust_df <- mat2df(mat = test_df)
+
+str(test_clust_df)
+
+```

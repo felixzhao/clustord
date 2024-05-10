@@ -31,7 +31,7 @@ predict_osm_category <- function(k, mu, phi, alpha) {
   }
   
   # Normalize probabilities so they sum to 1
-  #probabilities <- probabilities / sum(probabilities)
+  probabilities <- probabilities / sum(probabilities)
   
   # Return the group with the highest probability
   predicted_group <- which.max(probabilities)

@@ -22,10 +22,10 @@ cluster_samples <- sample(1:3, n_samples, replace = TRUE, prob = p_cluster)
 data.frame(Category = category_samples, Cluster = cluster_samples)
 
 # Create a data frame
-data1 <- data.frame(Sample = samples, Cluster = as.factor(clusters))
+data1 <- data.frame(Sample = category_samples, Cluster = as.factor(cluster_samples))
 
 # Plot
-plot <- ggplot(data1, aes(x = Sample, fill = Cluster)) +
+ggplot(data1, aes(x = Sample, fill = Cluster)) +
   geom_density(alpha = 0.5) +
   labs(title = "Density Plot of Samples by Cluster",
        x = "Sample Value",

@@ -1,3 +1,5 @@
+library("ggplot2")
+
 set.seed(123)  # for reproducibility
 
 # Parameters for categories
@@ -51,6 +53,9 @@ for (i in 1:n) {
   samples[i] <- rnorm(1, mean = mu[category], sd = sd[category])
 }
 
+# Round data to nearest integer and ensure it stays within [1,9]
+# samples <- pmin(pmax(round(samples), 1), 9)
+
 # Results
 dt <- data.frame(Sample = samples, Cluster = clusters, Category = categories)
 dt
@@ -68,7 +73,7 @@ hist(samples, breaks = 30, main = "Histogram of Samples from Mixture Distributio
 # Create a data frame
 data <- data.frame(Sample = samples, Cluster = as.factor(clusters))
 
-# Plot
+# Plot®
 plot <- ggplot(data, aes(x = Sample, fill = Cluster)) +
   geom_density(alpha = 0.5) +
   labs(title = "Density Plot of Samples by Cluster",

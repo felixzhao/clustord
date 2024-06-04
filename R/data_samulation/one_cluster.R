@@ -4,7 +4,7 @@ library(gridExtra)
 set.seed(123)  # Setting seed for reproducibility
 
 
-ord_cluster_simulate.plot <- function( q=3, alpha=c(1,-1), mu=c(0, 0.8, 0.6), phi=c(0, 0.7,1)) {
+ord_cluster_simulate.plot <- function( q=3, alpha=c(1,-1), mu=c(0, 0.8, 0.6), phi=c(0, 0.7,1), title="Overall Density Plot of Sampled Data") {
   probs <- numeric(q)
   
   G=1
@@ -17,7 +17,10 @@ ord_cluster_simulate.plot <- function( q=3, alpha=c(1,-1), mu=c(0, 0.8, 0.6), ph
         probs[k] <- 1
       }
     }
+    
     prob <- probs/sum(probs)
+    print(probs)
+    print(prob)
     data_val <- sample(1:q, size = 1000, replace = TRUE, prob = prob)
   }
   
@@ -26,11 +29,15 @@ ord_cluster_simulate.plot <- function( q=3, alpha=c(1,-1), mu=c(0, 0.8, 0.6), ph
   # Creating a data frame for ggplot
   samples <- data.frame(data_val = data_val)
   
+  # Round probs to 2 decimal places and convert to string
+  probs_str <- paste(sprintf("%.2f", probs), collapse = ", ")
+  prob_str <- paste(sprintf("%.2f", prob), collapse = ", ")
+  
   # Generating the density plot
   return( ggplot(samples, aes(x = data_val)) +
     geom_density(fill = "blue", alpha = 0.5) +
-    labs(title = "Overall Density Plot of Sampled Data",
-         x = "Sample Value",
+    labs(title = title,
+         x = paste("probs:", probs_str, "\nprob:", prob_str),
          y = "Density") +
     theme_minimal()
   )
@@ -40,32 +47,42 @@ ord_cluster_simulate.plot <- function( q=3, alpha=c(1,-1), mu=c(0, 0.8, 0.6), ph
 # no mean to have multi alpha, due to only has one cluster
 # thus, alpha always take the first
 q <- 2
-alpha=c(0.2)
-p1 <- ord_cluster_simulate.plot(q=q, alpha=alpha)
+alpha=c(0.08)
+title_str <- paste("alpha:", alpha)
+p1 <- ord_cluster_simulate.plot(q=q, alpha=alpha, title= title_str)
 alpha=c(1)
-p2 <- ord_cluster_simulate.plot(q=q, alpha=alpha)
+title_str <- paste("alpha:", alpha)
+p2 <- ord_cluster_simulate.plot(q=q, alpha=alpha, title= title_str)
 alpha=c(3)
-p3 <- ord_cluster_simulate.plot(q=q, alpha=alpha)
+title_str <- paste("alpha:", alpha)
+p3 <- ord_cluster_simulate.plot(q=q, alpha=alpha, title= title_str)
 
-grid.arrange(p1, p2, p3, ncol = 3)
+# grid.arrange(p1, p2, p3, ncol = 3)
 
 # diff mu
 mu <- c(0, 0.7, 0.5)
-p4 <- ord_cluster_simulate.plot(mu=mu)
+title_str <- paste("phi:", paste(sprintf("%.2f", mu), collapse = ", "))
+p4 <- ord_cluster_simulate.plot(mu=mu, title= title_str)
 mu <- c(0, 0.2, 0.9)
-p5 <- ord_cluster_simulate.plot(mu=mu)
+title_str <- paste("phi:", paste(sprintf("%.2f", mu), collapse = ", "))
+p5 <- ord_cluster_simulate.plot(mu=mu, title= title_str)
 mu <- c(0, 0.9, 0.2)
-p6 <- ord_cluster_simulate.plot(mu=mu)
+title_str <- paste("phi:", paste(sprintf("%.2f", mu), collapse = ", "))
+p6 <- ord_cluster_simulate.plot(mu=mu, title= title_str)
 
-grid.arrange(p4, p5, p6, ncol = 3)
+# grid.arrange(p4, p5, p6, ncol = 3)
 
 # diff phi
 
 phi <- c(0, 0.2, 1)
-p7 <- ord_cluster_simulate.plot(phi = phi)
+title_str <- paste("phi:", paste(sprintf("%.2f", phi), collapse = ", "))
+p7 <- ord_cluster_simulate.plot(phi = phi, title= title_str)
 phi <- c(0, 0.5, 1)
-p8 <- ord_cluster_simulate.plot(phi = phi)
+title_str <- paste("phi:", paste(sprintf("%.2f", phi), collapse = ", "))
+p8 <- ord_cluster_simulate.plot(phi = phi, title= title_str)
 phi <- c(0, 0.9, 1)
-p9 <- ord_cluster_simulate.plot(phi = phi)
+title_str <- paste("phi:", paste(sprintf("%.2f", phi), collapse = ", "))
+p9 <- ord_cluster_simulate.plot(phi = phi, title= title_str)
 
-grid.arrange(p7, p8, p9, ncol = 3)
+# plot
+grid.arrange(p1, p2, p3,p4, p5, p6,p7, p8, p9, ncol = 3, nrow = 3)

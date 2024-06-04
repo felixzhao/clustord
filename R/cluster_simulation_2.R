@@ -28,7 +28,7 @@ for (g in 1:G) {
 data_list <- lapply(1:G, function(x) numeric(sample_size))
 
 for (g in 1:G) {
-  data_list[g] <- sample(1:q, size = 1000, replace = TRUE, prob = cluster_probs[[g]])
+  data_list[[g]] <- sample(1:q, size = 1000, replace = TRUE, prob = cluster_probs[[g]])
 }
 
 # Flatten the list of lists into a single vector
@@ -40,3 +40,27 @@ cluster_idx <- rep(1:G, each = sample_size)
 # Creating a data frame for ggplot
 samples <- data.frame(category = data_val, cluster = cluster_idx)
 
+# ggplot(samples, aes(x = data_val)) +
+#   geom_density(fill = "blue", alpha = 0.5) +
+#   labs(title = title,
+#        x = "categories",
+#        y = "Density") +
+#   theme_minimal()
+
+# Plotting the density plot
+p1 <- ggplot(samples, aes(x = category)) +
+  geom_density(fill = "blue", alpha = 0.5) +
+  labs(title = "Density Plot of Categories",
+       x = "Categories",
+       y = "Density") +
+  theme_minimal()
+
+p2 <- ggplot(samples, aes(x = cluster)) +
+  geom_density(fill = "blue", alpha = 0.5) +
+  labs(title = "Density Plot of Clusters",
+       x = "Clusters",
+       y = "Density") +
+  theme_minimal()
+
+# plot
+grid.arrange(p1, p2, ncol = 2)

@@ -6,6 +6,7 @@ q=3
 alpha=c(1,-1) 
 mu=c(0, 0.6, 0.3) 
 phi=c(0, 0.8, 1)
+cluster_pi = c(0.3, 0.7)
 sample_size <- 1000
 
 cluster_probs <- lapply(1:G, function(x) numeric(q))
@@ -20,16 +21,22 @@ for (g in 1:G) {
       probs[k] <- 1
     }
   }
-  cluster_probs[[g]] <- probs/sum(probs)
+  cluster_probs[[g]] <- probs #/sum(probs)
 }
 
 # normalize
+
+# Adjust each cluster's probabilities by multiplying with corresponding pi
+adjusted_probs <- mapply(function(cluster, p) {
+  cluster * p
+}, cluster_probs, cluster_pi, SIMPLIFY = FALSE)
+
 # Flatten the list to calculate the global sum
-all_probs <- unlist(cluster_probs)
+all_probs <- unlist(adjusted_probs)
 total_sum <- sum(all_probs)
 
 # Normalize each cluster by the global sum
-normalized_cluster_probs <- lapply(cluster_probs, function(cluster) {
+normalized_cluster_probs <- lapply(adjusted_probs, function(cluster) {
   cluster / total_sum
 })
 
@@ -51,13 +58,6 @@ cluster_idx <- rep(1:G, each = sample_size)
 
 # Creating a data frame for ggplot
 samples <- data.frame(category = data_val, cluster = cluster_idx)
-
-# ggplot(samples, aes(x = data_val)) +
-#   geom_density(fill = "blue", alpha = 0.5) +
-#   labs(title = title,
-#        x = "categories",
-#        y = "Density") +
-#   theme_minimal()
 
 # Plotting the density plot
 p1 <- ggplot(samples, aes(x = category)) +

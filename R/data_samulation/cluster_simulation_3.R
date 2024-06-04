@@ -59,6 +59,9 @@ cluster_idx <- rep(1:G, each = sample_size)
 # Creating a data frame for ggplot
 samples <- data.frame(category = data_val, cluster = cluster_idx)
 
+# save to csv file
+write.csv(samples, "./data/simulation_catgories_n_cluster.csv", row.names=FALSE)
+
 # Plotting the density plot
 p1 <- ggplot(samples, aes(x = category)) +
   geom_density(fill = "blue", alpha = 0.5) +

@@ -73,7 +73,7 @@ print(results$pi.out)
 
 # prediction
 
-predict_osm_category <- function(k, mu, phi, alpha) {
+predict_osm_category <- function(k, mu, phi, alpha, pi) {
   if (k > length(mu) || k < 1) {
     stop("k is out of bounds for the length of mu")
   }
@@ -91,8 +91,15 @@ predict_osm_category <- function(k, mu, phi, alpha) {
     probabilities[g] <- exp(mu_k + phi_k * alpha[g])
   }
   
+  cluster_probs <-  probabilities * pi
+  print(paste("cluster_probs", cluster_probs))
+  
+  total_cluster_probs <- sum(probabilities * pi)
+  print(paste("total_cluster_probs", total_cluster_probs))
+  
   # Normalize probabilities so they sum to 1
-  probabilities <- probabilities / sum(probabilities)
+  probabilities <- cluster_probs / total_cluster_probs
+  print(paste("probabilities", probabilities))
   
   # Return the group with the highest probability
   predicted_group <- which.max(probabilities)
@@ -107,6 +114,7 @@ alpha <- parlist$rowc
 print(mu)
 print(phi)
 print(alpha)
+print(pi)
 
 
 
@@ -114,7 +122,7 @@ new_obs_predictors <- test_df[1,]
 new_obs_predictors <- as.numeric(as.character(test_df[1,]))
 print(new_obs_predictors)
 print(new_obs_predictors[1])
-probs <- predict_osm_category(new_obs_predictors[1], mu, phi, alpha)
+probs <- predict_osm_category(new_obs_predictors[1], mu, phi, alpha, pi)
 print(probs)
 
 # print("estimate")
@@ -126,7 +134,7 @@ matched <- 0
 
 for (i in 1:nrow(test_df)){
     new_obs_predictors <- as.numeric(as.character(test_df[i,]))
-    probs <- predict_osm_category(new_obs_predictors[1], mu, phi, alpha)
+    probs <- predict_osm_category(new_obs_predictors[1], mu, phi, alpha,pi)
     print(paste("i",i,"estimate", which.max(probs), "actual:", test_df[i,][2]))
     if (which.max(probs) == test_df[i,][2]){
       print("matched")

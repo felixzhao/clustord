@@ -22,3 +22,11 @@ include logic:
 - eval,
   - accuracy
   - confusion matrix
+
+R\prediction_baseline\prediction_4.R
+
+logic:
+- based on 3_1, updated prediction logic
+  - replace select max prob cluster as prediction, 
+  - replace with normalize category subset cluster probs
+  - then, generate obs from this dist as prediction.

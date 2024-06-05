@@ -1,3 +1,5 @@
+library(ggplot2)
+
 set.seed(123)  # Setting seed for reproducibility
 
 G <- 2
@@ -22,3 +24,14 @@ for (g in 1:G) {
 prob <- probs/sum(probs)
 
 data_val <- sample(1:q, size = 1000, replace = TRUE, prob = prob)
+
+# Creating a data frame for ggplot
+samples <- data.frame(data_val = data_val)
+
+# Generating the density plot
+ggplot(samples, aes(x = data_val)) +
+  geom_density(fill = "blue", alpha = 0.5) +
+  labs(title = "Overall Density Plot of Sampled Data",
+       x = "Sample Value",
+       y = "Density") +
+  theme_minimal()

@@ -30,13 +30,16 @@ labels <- cut(data, breaks = breaks, labels = labels, include.lowest = TRUE)
 # Create a data frame to store the data and labels
 df <- data.frame(value = data, label = labels)
 
-# Plot density grouped by label
-ggplot(df, aes(x = value, fill = label)) +
-  geom_density(alpha = 0.5) +
-  labs(title = "Density Plot of Data Grouped by Label",
+# Plot both individual densities and overall density
+plot <- ggplot(df, aes(x = value)) +
+  geom_density(aes(fill = label), alpha = 0.6) +  # Individual densities
+  geom_density(data = df, aes(x = value, y = ..scaled..), fill = "gray", alpha = 0.3) +  # Overall density scaled
+  scale_fill_manual(values = c("N(2, 0.5)" = "blue", "N(1, 0.5)" = "red")) +
+  labs(title = "Density Plot of Data from Mixture of Two Normal Distributions",
+       subtitle = "Blue: N(2, 0.5), Red: N(1, 0.5), Gray: Combined",
        x = "Value",
        y = "Density",
-       fill = "Label") +
+       fill = "Distribution") +
   theme_minimal()
 
 # Print the plot

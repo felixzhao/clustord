@@ -8,6 +8,8 @@ mu=c(0, 0.6, 0.3)
 phi=c(0, 0.8, 1)
 cluster_pi = c(0.3, 0.7)
 sample_size <- 1000
+total_sample_size <- sample_size * G
+
 
 cluster_probs <- lapply(1:G, function(x) numeric(q))
 
@@ -47,20 +49,21 @@ normalized_cluster_probs
 data_list <- lapply(1:G, function(x) numeric(sample_size))
 
 for (g in 1:G) {
-  data_list[[g]] <- sample(1:q, size = 1000, replace = TRUE, prob = normalized_cluster_probs[[g]])
+  cluster_sample_size <- total_sample_size * cluster_pi[g]
+  data_list[[g]] <- sample(1:q, size = cluster_sample_size, replace = TRUE, prob = normalized_cluster_probs[[g]])
 }
 
 # Flatten the list of lists into a single vector
 data_val <- unlist(data_list)
 
 # Create a vector indicating the sublist number for each value
-cluster_idx <- rep(1:G, each = sample_size)
+cluster_idx <- unlist(lapply(1:G, function(g) rep(g, length(data_list[[g]]))))
 
 # Creating a data frame for ggplot
 samples <- data.frame(category = data_val, cluster = cluster_idx)
 
 # save to csv file
-write.csv(samples, "./data/simulation_catgories_n_cluster.csv", row.names=FALSE)
+write.csv(samples, "./data/simulation_catgories_n_cluster_2.csv", row.names=FALSE)
 
 # Plotting the density plot
 p1 <- ggplot(samples, aes(x = category)) +
@@ -78,4 +81,36 @@ p2 <- ggplot(samples, aes(x = cluster)) +
   theme_minimal()
 
 # plot
-grid.arrange(p1, p2, ncol = 2)
+# grid.arrange(p1, p2, ncol = 2)
+
+
+# Create the bar plot
+p3 <- ggplot(samples, aes(x = factor(category), fill = factor(cluster))) +
+  geom_bar(position = "dodge") +
+  labs(x = "Category", y = "Count", fill = "Cluster") +
+  theme_minimal() +
+  ggtitle("Bar Plot of Categories Grouped by Cluster")
+
+p4 <- ggplot(samples, aes(x = factor(cluster), fill = factor(category))) +
+  geom_bar(position = "dodge") +
+  labs(x = "Cluster", y = "Count", fill = "Category") +
+  theme_minimal() +
+  ggtitle("Bar Plot of Clusters Grouped by Category")
+
+
+# Create the stacked column chart
+p5 <- ggplot(samples, aes(x = factor(category), fill = factor(cluster))) +
+  geom_bar(stat = "count", position = "stack") +
+  labs(x = "Category", y = "Count", fill = "Cluster") +
+  theme_minimal() +
+  ggtitle("Stacked Column Chart of Categories by Cluster")
+
+p6 <- ggplot(samples, aes(x = factor(cluster), fill = factor(category))) +
+  geom_bar(stat = "count", position = "stack") +
+  labs(x = "Cluster", y = "Count", fill = "Category") +
+  theme_minimal() +
+  ggtitle("Stacked Column Chart of Clusters by Category")
+
+# plot
+# grid.arrange(p3, p4, p5, p6, ncol = 2, nrow = 2)
+grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2, nrow = 3)

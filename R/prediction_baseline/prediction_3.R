@@ -1,7 +1,9 @@
+# install.packages("caret")
+
 # Load necessary library
 library("ggplot2")
 library("clustord")
-
+library(caret)
 
 
 # Load the data from the CSV file
@@ -130,19 +132,35 @@ print(probs)
 # print(test_df[1,])
 
 
-matched <- 0
+actual <- test_df[,2]
+predicted <- c()
 
 for (i in 1:nrow(test_df)){
     new_obs_predictors <- as.numeric(as.character(test_df[i,]))
     probs <- predict_osm_category(new_obs_predictors[1], mu, phi, alpha,pi)
-    print(paste("i",i,"estimate", which.max(probs), "actual:", test_df[i,][2]))
-    if (which.max(probs) == test_df[i,][2]){
-      print("matched")
-      matched <- matched + 1
-    }
+    predict_cluster <- which.max(probs)
+    # print(paste("i",i,"estimate", which.max(probs), "actual:", test_df[i,][2]))
+    predicted[i] <- predict_cluster
 }
 
-print(paste("match rate:", matched / nrow(test_df)))
+# Accuracy
+
+# Calculate accuracy
+accuracy <- sum(actual == predicted) / length(actual)
+
+# Print the accuracy
+print(paste("Accuracy:", accuracy))
 
 
+# confusion matrix
+
+# Convert predicted and actual vectors to factors with the same levels
+predicted <- factor(predicted, levels = c(1, 2))
+actual <- factor(actual, levels = c(1, 2))
+
+# Calculate confusion matrix
+conf_matrix <- confusionMatrix(predicted, actual)
+
+# Print the confusion matrix
+print(conf_matrix)
 

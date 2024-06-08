@@ -114,3 +114,4 @@ p6 <- ggplot(samples, aes(x = factor(cluster), fill = factor(category))) +
 # plot
 # grid.arrange(p3, p4, p5, p6, ncol = 2, nrow = 2)
 grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2, nrow = 3)
+

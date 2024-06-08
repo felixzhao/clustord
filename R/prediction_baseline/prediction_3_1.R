@@ -63,8 +63,8 @@ str(train_clust_df)
 
 
 # training
-# Model Log(P(Y=k)/P(Y=1))=mu_k+phi_k*rowc_coef_r with 3 row clustering groups:
-results <- clustord(Y~ROWCLUST,model="OSM",2,long.df=train_clust_df, EM.control=list(EMcycles=2,startEMcycles=2), nstarts=2)
+# Model Log(P(Y=k)/P(Y=1))=mu_k+phi_k*rowc_coef_r with 2 row clustering groups:
+results <- clustord(Y~ROWCLUST,model="OSM",2,long.df=train_clust_df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=5)
 
 cat("parlist.out")
 print(results$parlist.out)

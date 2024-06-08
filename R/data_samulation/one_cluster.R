@@ -4,7 +4,7 @@ library(gridExtra)
 set.seed(123)  # Setting seed for reproducibility
 
 
-ord_cluster_simulate.plot <- function( q=3, alpha=c(1,-1), mu=c(0, 0.8, 0.6), phi=c(0, 0.7,1), title="Overall Density Plot of Sampled Data") {
+ord_cluster_simulate.plot <- function( q=3, alpha=c(-1), mu=c(0, 0.8, 0.6), phi=c(0, 0.7,1), title="Overall Density Plot of Sampled Data") {
   probs <- numeric(q)
   
   G=1
@@ -46,7 +46,7 @@ ord_cluster_simulate.plot <- function( q=3, alpha=c(1,-1), mu=c(0, 0.8, 0.6), ph
 # diff alpha
 # no mean to have multi alpha, due to only has one cluster
 # thus, alpha always take the first
-q <- 2
+q <- 3
 alpha=c(0.08)
 title_str <- paste("alpha:", alpha)
 p1 <- ord_cluster_simulate.plot(q=q, alpha=alpha, title= title_str)
@@ -61,13 +61,13 @@ p3 <- ord_cluster_simulate.plot(q=q, alpha=alpha, title= title_str)
 
 # diff mu
 mu <- c(0, 0.7, 0.5)
-title_str <- paste("phi:", paste(sprintf("%.2f", mu), collapse = ", "))
+title_str <- paste("mu:", paste(sprintf("%.2f", mu), collapse = ", "))
 p4 <- ord_cluster_simulate.plot(mu=mu, title= title_str)
 mu <- c(0, 0.2, 0.9)
-title_str <- paste("phi:", paste(sprintf("%.2f", mu), collapse = ", "))
+title_str <- paste("mu:", paste(sprintf("%.2f", mu), collapse = ", "))
 p5 <- ord_cluster_simulate.plot(mu=mu, title= title_str)
 mu <- c(0, 0.9, 0.2)
-title_str <- paste("phi:", paste(sprintf("%.2f", mu), collapse = ", "))
+title_str <- paste("mu:", paste(sprintf("%.2f", mu), collapse = ", "))
 p6 <- ord_cluster_simulate.plot(mu=mu, title= title_str)
 
 # grid.arrange(p4, p5, p6, ncol = 3)

@@ -84,71 +84,44 @@ merged_df <- reduce(dataframes, function(df1, df2) {
 merged_df <- merged_df %>% select(-id)
 
 # Display the merged dataframe
-print(merged_df)
+# print(merged_df)
 
 
 # save to csv file
-write.csv(samples, "./data/simulation_catgories_n_cluster_2.csv", row.names=FALSE)
+write.csv(merged_df, "./data/simulation_catgories_n_cluster_c3_1.csv", row.names=FALSE)
 
 
-
-plot_y <- function(samples, y_idx) {
-  y <- paste0("Y", y_idx)
-  # Plotting the density plot
-  p1 <- ggplot(samples, aes(x = !!sym(y))) +
-    geom_density(fill = "blue", alpha = 0.5) +
-    labs(title = "Density Plot of Categories",
-         x = "Categories",
+# Plot
+plot_y <- function(df, y_idx) {
+  sample_name <- paste0("Y", y_idx)
+  # Plot
+  data1 <- data.frame(Sample = df[[sample_name]], Cluster = as.factor(df$cluster))
+  
+  plot <- ggplot(data1, aes(x = Sample, fill = Cluster)) +
+    geom_density(alpha = 0.5) +
+    labs(title = "Density Plot of Samples by Cluster",
+         x = "Sample Value",
          y = "Density") +
+    scale_fill_brewer(palette = "Set1", name = "Cluster") +
     theme_minimal()
-  
-  p2 <- ggplot(samples, aes(x = cluster)) +
-    geom_density(fill = "blue", alpha = 0.5) +
-    labs(title = "Density Plot of Clusters",
-         x = "Clusters",
-         y = "Density") +
-    theme_minimal()
-  
-  # plot
-  grid.arrange(p1, p2, ncol = 2)
-  
-  # Create the bar plot
-  p3 <- ggplot(samples, aes(x = factor(y), fill = factor(cluster))) +
-    geom_bar(position = "dodge") +
-    labs(x = "Category", y = "Count", fill = "Cluster") +
-    theme_minimal() +
-    ggtitle("Bar Plot of Categories Grouped by Cluster")
-  
-  grid.arrange(p3, ncol = 1)
-  
-  p4 <- ggplot(samples, aes(x = factor(cluster), fill = factor(y))) +
-    geom_bar(position = "dodge") +
-    labs(x = "Cluster", y = "Count", fill = "Category") +
-    theme_minimal() +
-    ggtitle("Bar Plot of Clusters Grouped by Category")
-  
-  grid.arrange(p3, p4, ncol = 2)
-  
-  # Create the stacked column chart
-  p5 <- ggplot(samples, aes(x = factor(y), fill = factor(cluster))) +
-    geom_bar(stat = "count", position = "stack") +
-    labs(x = "Category", y = "Count", fill = "Cluster") +
-    theme_minimal() +
-    ggtitle("Stacked Column Chart of Categories by Cluster")
-  
-  p6 <- ggplot(samples, aes(x = factor(cluster), fill = factor(y))) +
-    geom_bar(stat = "count", position = "stack") +
-    labs(x = "Cluster", y = "Count", fill = "Category") +
-    theme_minimal() +
-    ggtitle("Stacked Column Chart of Clusters by Category")
-  
-  # plot
-  grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2, nrow = 3,
-               top = textGrob(paste0("Density Plots of predictor Y", y_idx) , gp = gpar(fontsize = 16, fontface = "bold")))
 }
 
-
+plots <- list()
 for (i in 1:number_of_y){
-  plot_y(merged_df, i)
+  plots[[i]] <- plot_y(merged_df, i)
 }
 
+# Calculate number of rows and columns dynamically
+ncol <- 3  # Number of columns
+nrow <- ceiling(number_of_y / ncol)  # Number of rows
+
+# Ensure the grid has enough cells
+stopifnot(nrow * ncol >= length(plots))
+
+# Arrange the plots dynamically and add a title
+grid.arrange(
+  grobs = plots,
+  ncol = ncol,
+  nrow = nrow,
+  top = textGrob("Density Plots of Categories", gp = gpar(fontsize = 16, fontface = "bold"))
+)

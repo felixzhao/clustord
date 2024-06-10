@@ -1,13 +1,18 @@
 # install.packages("caret")
+# install.packages("dplyr")
 
 # Load necessary library
-library("ggplot2")
+#library(dplyr)
 library("clustord")
 library(caret)
 
+library(ggplot2)
+library(gridExtra)
+library(grid)
 
+## read data
 # Load the data from the CSV file
-df <- read.csv("./data/simulation_catgories_n_cluster_2.csv", stringsAsFactors = FALSE)
+df <- read.csv("./data/simulation_catgories_n_cluster_c3_1.csv", stringsAsFactors = FALSE)
 
 # Check the structure of the loaded data
 str(df)
@@ -15,37 +20,68 @@ str(df)
 # View the first few rows of the data
 head(df)
 
+## parameters
 
-##
+set.seed(123)
+number_of_y <- ncol(df) - 1
 
-data1 <- data.frame(Sample = df$category, Cluster = as.factor(df$cluster))
+
+## plot data
 
 # Plot
-plot <- ggplot(data1, aes(x = Sample, fill = Cluster)) +
-  geom_density(alpha = 0.5) +
-  labs(title = "Density Plot of Samples by Cluster",
-       x = "Sample Value",
-       y = "Density") +
-  scale_fill_brewer(palette = "Set1", name = "Cluster") +
-  theme_minimal()
+plot_y <- function(df, y_idx) {
+  sample_name <- paste0("Y", y_idx)
+  # Plot
+  data1 <- data.frame(Sample = df[[sample_name]], Cluster = as.factor(df$cluster))
+  
+  plot <- ggplot(data1, aes(x = Sample, fill = Cluster)) +
+    geom_density(alpha = 0.5) +
+    labs(title = "Density by Cluster",
+         x = sample_name,
+         y = "Density") +
+    scale_fill_brewer(palette = "Set1", name = "Cluster") +
+    theme_minimal()
+}
 
-# Print the plot
-print(plot)
+plot_all_predictors <- function(df, number_of_y) {
+  plots <- list()
+  for (i in 1:number_of_y){
+    plots[[i]] <- plot_y(df, i)
+  }
+  
+  # Calculate number of rows and columns dynamically
+  ncol <- 3  # Number of columns
+  nrow <- ceiling(number_of_y / ncol)  # Number of rows
+  
+  # Ensure the grid has enough cells
+  stopifnot(nrow * ncol >= length(plots))
+  
+  # Arrange the plots dynamically and add a title
+  grid.arrange(
+    grobs = plots,
+    ncol = ncol,
+    nrow = nrow,
+    top = textGrob("Density of Categories", gp = gpar(fontsize = 16, fontface = "bold"))
+  )
+}
 
-###
+plot_all_predictors(df, number_of_y = number_of_y)
+
+### split train & test data
 
 
-# Assume df is your original dataframe
-set.seed(123)  # for reproducibility
 indexes <- sample(1:nrow(df), size = 0.7 * nrow(df))
 
 train_df <- df[indexes, ]
 test_df <- df[-indexes, ]
 
+## plot train
 
+plot_all_predictors(train_df, number_of_y = number_of_y)
 
+## data preparation
 
-train_clust_df <- mat2df(mat = train_df["category"])
+train_clust_df <- mat2df(mat = train_df %>% select(-cluster))
 
 str(train_clust_df)
 
@@ -55,7 +91,7 @@ str(train_clust_df)
 # str(test_clust_df)
 
 
-##
+
 
 
 
@@ -66,12 +102,15 @@ str(train_clust_df)
 # Model Log(P(Y=k)/P(Y=1))=mu_k+phi_k*rowc_coef_r with 2 row clustering groups:
 results <- clustord(Y~ROWCLUST,model="OSM",2,long.df=train_clust_df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=5)
 
-cat("parlist.out")
-print(results$parlist.out)
-
-cat("results$pi.out")
-print(results$pi.out)
-
+parlist <- results$parlist.out
+cluster_pi <- results$pi.out
+mu <- parlist$mu 
+phi <- parlist$phi
+alpha <- parlist$rowc
+print(mu)
+print(phi)
+print(alpha)
+print(cluster_pi)
 
 # prob matrix
 
@@ -117,15 +156,7 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi) {
   return(normalized_cluster_probs)
 }
 
-parlist <- results$parlist.out
-cluster_pi <- results$pi.out
-mu <- parlist$mu 
-phi <- parlist$phi
-alpha <- parlist$rowc
-print(mu)
-print(phi)
-print(alpha)
-print(cluster_pi)
+
 
 probs <- get_cluster_prob_matrix(mu, phi, alpha, cluster_pi)
 print(paste("Cluster Prob matrix:", probs))

@@ -90,6 +90,11 @@ str(train_clust_df)
 
 # str(test_clust_df)
 
+plot_all_predictors(test_df, number_of_y = number_of_y)
+
+test_Y <- test_df %>% select(-cluster)
+
+test_cluster <- test_df["cluster"]
 
 
 
@@ -132,59 +137,59 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi) {
         probs[k] <- 1
       }
     }
-    cluster_probs[[g]] <- probs #/sum(probs)
+    # normalize
+    cluster_probs[[g]] <- probs/sum(probs)
   }
-  
-  # normalize
   
   # Adjust each cluster's probabilities by multiplying with corresponding pi
   adjusted_probs <- mapply(function(cluster, p) {
     cluster * p
   }, cluster_probs, cluster_pi, SIMPLIFY = FALSE)
   
-  # Flatten the list to calculate the global sum
-  all_probs <- unlist(adjusted_probs)
-  total_sum <- sum(all_probs)
-  
-  # Normalize each cluster by the global sum
-  normalized_cluster_probs <- lapply(adjusted_probs, function(cluster) {
-    cluster / total_sum
-  })
-  
-  normalized_cluster_probs
-  
-  return(normalized_cluster_probs)
+  return(do.call(rbind, lapply(adjusted_probs, unlist)))
 }
 
 
 
 probs <- get_cluster_prob_matrix(mu, phi, alpha, cluster_pi)
-print(paste("Cluster Prob matrix:", probs))
+print("Cluster Prob matrix:")
+probs
 
 
 # prediction
 
-predict_cluster_by_category_osm <- function (k, probs){
-  if (k < 1 || k > length(probs[[1]])) {
-    stop("category id must be positive and less than categories count.")
-  }
-  return(which.max(sapply(probs, function(x) x[k])))
+z_prediction <- function(y, probs) {
+  # Extract columns based on y values and combine into matrix p
+  p <- t(sapply(y, function(k) probs[, k]))
+  # print(p)
+  # Calculate the products of each column
+  z <- apply(p, 2, prod)
+  
+  return(z)
+}
+
+cluster_prediction <- function(y, probs){
+  z <- z_prediction(y, probs)
+  return(which.max(z))
 }
 
 ## prediction one observation
-new_obs_predictors <- test_df[1,]
-new_obs_predictors <- as.numeric(as.character(test_df[1,]))
-print(new_obs_predictors)
-print(new_obs_predictors[1])
-print(predict_cluster_by_category_osm(new_obs_predictors[1], probs))
+new_obs_predictor <- test_Y[1,]
+
+z <- z_prediction(new_obs_predictor, probs)
+
+one_prediction <- cluster_prediction(new_obs_predictor, probs)
+
+print(z)
+print(one_prediction)
 
 ## prediction all test data
 actual <- test_df[,2]
 predicted <- c()
 
-for (i in 1:nrow(test_df)){
-    new_obs <- as.numeric(as.character(test_df[i,]))
-    predicted[i] <- predict_cluster_by_category_osm(new_obs[1], probs)
+for (i in 1:nrow(test_Y)){
+    new_obs <- as.numeric(as.character(test_Y[i,]))
+    predicted[i] <- cluster_prediction(new_obs, probs)
 }
 
 # Accuracy

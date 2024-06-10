@@ -2,6 +2,7 @@ library(rlang)
 library(ggplot2)
 library(gridExtra)
 library(grid)
+library(purrr)
 
 set.seed(123)
 
@@ -28,7 +29,7 @@ for (g in 1:G) {
       probs[k] <- 1
     }
   }
-  cluster_probs[[g]] <- probs #/sum(probs)
+  cluster_probs[[g]] <- probs/sum(probs)
 }
 
 # normalize
@@ -38,14 +39,7 @@ adjusted_probs <- mapply(function(cluster, p) {
   cluster * p
 }, cluster_probs, cluster_pi, SIMPLIFY = FALSE)
 
-# Flatten the list to calculate the global sum
-all_probs <- unlist(adjusted_probs)
-total_sum <- sum(all_probs)
-
-# Normalize each cluster by the global sum
-normalized_cluster_probs <- lapply(adjusted_probs, function(cluster) {
-  cluster / total_sum
-})
+normalized_cluster_probs <- adjusted_probs
 
 normalized_cluster_probs
 

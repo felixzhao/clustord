@@ -17,6 +17,7 @@ Prediction   1   2
   [2,] 0.31550974 0.2579691 0.1571246
 
 - Nothing improve in experiment with more clusters and categories.
+- No improve with more clusters and categories and balance prob.
 
 # simulation
 R\catchup_3\cluster_simulation_c3_1.R
@@ -28,11 +29,13 @@ updates:
 # simulation data
 data\simulation_categories_n_cluster_c3_1.csv # try 2 cluster and 3 categories
 data\simulation_categories_n_cluster_c3_2.csv # try 3 cluster and 5 categories
+data\simulation_categories_n_cluster_c3_3.csv # try 3 cluster and 5 categories, with balance prob.
 
 # prediction
 
 R\catchup_3\prediction_way_1_c3_1.R
 R\catchup_3\prediction_way_1_c3_2.R
+R\catchup_3\prediction_way_1_c3_3.R
 
 updates:
 - call clusOrd with 10 Y, rows cluster converges

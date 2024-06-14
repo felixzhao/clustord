@@ -142,11 +142,11 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi) {
   }
   
   # Adjust each cluster's probabilities by multiplying with corresponding pi
-  adjusted_probs <- mapply(function(cluster, p) {
-    cluster * p
-  }, cluster_probs, cluster_pi, SIMPLIFY = FALSE)
+  # adjusted_probs <- mapply(function(cluster, p) {
+  #   cluster * p
+  # }, cluster_probs, cluster_pi, SIMPLIFY = FALSE)
   
-  return(do.call(rbind, lapply(adjusted_probs, unlist)))
+  return(do.call(rbind, lapply(cluster_probs, unlist)))
 }
 
 
@@ -158,27 +158,32 @@ probs
 
 # prediction
 
-z_prediction <- function(y, probs) {
+z_prediction <- function(y, probs, cluster_pi) {
   # Extract columns based on y values and combine into matrix p
   p <- t(sapply(y, function(k) probs[, k]))
   # print(p)
   # Calculate the products of each column
   z <- apply(p, 2, prod)
   
-  return(z)
+  # Adjust each cluster's probabilities by multiplying with corresponding pi
+  adjusted_z <- mapply(function(cluster, p) {
+    cluster * p
+  }, z, cluster_pi, SIMPLIFY = FALSE)
+  
+  return(adjusted_z)
 }
 
-cluster_prediction <- function(y, probs){
-  z <- z_prediction(y, probs)
+cluster_prediction <- function(y, probs, cluster_pi){
+  z <- z_prediction(y, probs, cluster_pi)
   return(which.max(z))
 }
 
 ## prediction one observation
 new_obs_predictor <- test_Y[1,]
 
-z <- z_prediction(new_obs_predictor, probs)
+z <- z_prediction(new_obs_predictor, probs, cluster_pi)
 
-one_prediction <- cluster_prediction(new_obs_predictor, probs)
+one_prediction <- cluster_prediction(new_obs_predictor, probs, cluster_pi)
 
 print(z)
 print(one_prediction)
@@ -189,7 +194,7 @@ predicted <- c()
 
 for (i in 1:nrow(test_Y)){
     new_obs <- as.numeric(as.character(test_Y[i,]))
-    predicted[i] <- cluster_prediction(new_obs, probs)
+    predicted[i] <- cluster_prediction(new_obs, probs, cluster_pi)
 }
 
 # Accuracy

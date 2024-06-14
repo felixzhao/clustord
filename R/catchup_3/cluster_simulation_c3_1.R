@@ -34,14 +34,16 @@ for (g in 1:G) {
 
 # normalize
 
-# Adjust each cluster's probabilities by multiplying with corresponding pi
-adjusted_probs <- mapply(function(cluster, p) {
-  cluster * p
-}, cluster_probs, cluster_pi, SIMPLIFY = FALSE)
+# # Adjust each cluster's probabilities by multiplying with corresponding pi
+# adjusted_probs <- mapply(function(cluster, p) {
+#   cluster * p
+# }, cluster_probs, cluster_pi, SIMPLIFY = FALSE)
+# 
+# normalized_cluster_probs <- adjusted_probs
+# 
+# normalized_cluster_probs
 
-normalized_cluster_probs <- adjusted_probs
-
-normalized_cluster_probs
+normalized_cluster_probs <-cluster_probs
 
 # sampling
 

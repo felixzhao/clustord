@@ -2,6 +2,10 @@ After 489 catch up 3
 
 # summarise
 
+in Catch up 4, Louise help me fixed this issue.
+The reason is the PI times in wrong place, leading to PI^n be times.
+That is why cluster with larger PI, tend to be predicted always in the code with this bug.
+
 - fininal accruay rate is higher, but due to all prediction is in one cluster.
 - from confusion matrix, the model not given good result
             Reference

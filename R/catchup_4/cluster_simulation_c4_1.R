@@ -6,8 +6,10 @@ library(purrr)
 
 set.seed(123)
 
-G=2 
-q=3 
+# prob matrix for each Y, in current stage suppose all same.
+
+G=2 # number of clusters
+q=3 # number of categories
 alpha=c(1,-1) 
 mu=c(0, 0.6, 0.3) 
 phi=c(0, 0.8, 1)
@@ -55,24 +57,29 @@ y_sampling <- function(sample_size, total_sample_size, cluster_pi, q, cluster_pr
   return(samples)
 }
 
-# Create a list of N dataframes
-dataframes <- lapply(1:number_of_y, function(i) y_sampling(sample_size, total_sample_size, cluster_pi, q, cluster_probs, i))
+data_samping <- function(sample_size, total_sample_size, cluster_pi, q, 
+                         cluster_probs, number_of_y) {
 
-# Merge all dataframes
-merged_df <- reduce(dataframes, function(df1, df2) {
-  inner_join(df1, df2, by = c("cluster", "id"))
-})
+  # Create a list of N dataframes
+  dataframes <- lapply(1:number_of_y, function(i) y_sampling(sample_size, total_sample_size, cluster_pi, q, cluster_probs, i))
+  
+  # Merge all dataframes
+  merged_df <- reduce(dataframes, function(df1, df2) {
+    inner_join(df1, df2, by = c("cluster", "id"))
+  })
+  
+  # Remove the unique identifier column
+  merged_df <- merged_df %>% select(-id)
+  
+  return(merged_df)
 
-# Remove the unique identifier column
-merged_df <- merged_df %>% select(-id)
+}
 
-# Display the merged dataframe
-# print(merged_df)
-
-
-# save to csv file
-write.csv(merged_df, "./data/simulation_catgories_n_cluster_c4_1.csv", row.names=FALSE)
-
+save_data <- function(df, save_path = "./data/simulation_catgories_n_cluster_c4_1.csv"){
+  # save to csv file
+  write.csv(df, save_path , row.names=FALSE)
+  print(paste("Save data to",save_path,"Done."))
+}
 
 # Plot
 plot_y <- function(df, y_idx) {
@@ -82,29 +89,57 @@ plot_y <- function(df, y_idx) {
   
   plot <- ggplot(data1, aes(x = Sample, fill = Cluster)) +
     geom_density(alpha = 0.5) +
-    labs(title = "Density Plot of Samples by Cluster",
+    labs(title = sample_name,
          x = "Sample Value",
          y = "Density") +
     scale_fill_brewer(palette = "Set1", name = "Cluster") +
     theme_minimal()
 }
 
-plots <- list()
-for (i in 1:number_of_y){
-  plots[[i]] <- plot_y(merged_df, i)
+plot_all_y <- function(df, number_of_y, number_of_y_for_print=10, n_print_col=3)  { 
+  df <- df[,1:11]
+  plots <- list()
+  for (i in 1:number_of_y_for_print){
+    plots[[i]] <- plot_y(df, i)
+  }
+  
+  # Calculate number of rows and columns dynamically
+  ncol <- n_print_col # Number of columns in plot
+  nrow <- ceiling(number_of_y_for_print / ncol)  # Number of rows
+  
+  # Ensure the grid has enough cells
+  stopifnot(nrow * ncol >= length(plots))
+  
+  # Arrange the plots dynamically and add a title
+  grid.arrange(
+    grobs = plots,
+    ncol = ncol,
+    nrow = nrow,
+    top = textGrob(paste("TOP 10 of", number_of_y,"Y Density Plots by Categories"), 
+                   gp = gpar(fontsize = 16, fontface = "bold"))
+  )
 }
 
-# Calculate number of rows and columns dynamically
-ncol <- 3  # Number of columns
-nrow <- ceiling(number_of_y / ncol)  # Number of rows
+# 10 Y
+number_of_y <- 20
+save_path <- paste0("./data/simulation_y_",number_of_y,"_c4_1.csv")
 
-# Ensure the grid has enough cells
-stopifnot(nrow * ncol >= length(plots))
+df_10_y <- data_samping(sample_size, total_sample_size, cluster_pi, q, 
+                         cluster_probs, number_of_y
+                         )
+plot_all_y(df_10_y, number_of_y)
+save_data(df_10_y, save_path = save_path)
 
-# Arrange the plots dynamically and add a title
-grid.arrange(
-  grobs = plots,
-  ncol = ncol,
-  nrow = nrow,
-  top = textGrob("Density Plots of Categories", gp = gpar(fontsize = 16, fontface = "bold"))
-)
+# simulation for different number of Y
+n_of_y_list <- c(20, 30, 50)
+for (number_of_y in n_of_y_list){
+  print(number_of_y)
+  
+  save_path <- paste0("./data/simulation_y_",number_of_y,"_c4_1.csv")
+  
+  df_10_y <- data_samping(sample_size, total_sample_size, cluster_pi, q, 
+                          cluster_probs, number_of_y
+  )
+  plot_all_y(df_10_y, number_of_y)
+  save_data(df_10_y, save_path = save_path)
+}

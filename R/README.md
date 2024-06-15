@@ -1,10 +1,22 @@
-After 489 catch up 3
-
-# summarise
+# During 489 Catch Up 4
 
 in Catch up 4, Louise help me fixed this issue.
 The reason is the PI times in wrong place, leading to PI^n be times.
 That is why cluster with larger PI, tend to be predicted always in the code with this bug.
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2
+         1 162  22
+         2  28 388
+                                          
+               Accuracy : 0.9167          
+                 95% CI : (0.8916, 0.9375)
+
+# After 489 catch up 3
+
+## summarise
 
 - fininal accruay rate is higher, but due to all prediction is in one cluster.
 - from confusion matrix, the model not given good result
@@ -23,19 +35,19 @@ Prediction   1   2
 - Nothing improve in experiment with more clusters and categories.
 - No improve with more clusters and categories and balance prob.
 
-# simulation
+## simulation
 R\catchup_3\cluster_simulation_c3_1.R
 
 updates:
 - normalized prob by cluster
 - simulate data with 10 Y
 
-# simulation data
+## simulation data
 data\simulation_categories_n_cluster_c3_1.csv # try 2 cluster and 3 categories
 data\simulation_categories_n_cluster_c3_2.csv # try 3 cluster and 5 categories
 data\simulation_categories_n_cluster_c3_3.csv # try 3 cluster and 5 categories, with balance prob.
 
-# prediction
+## prediction
 
 R\catchup_3\prediction_way_1_c3_1.R
 R\catchup_3\prediction_way_1_c3_2.R
@@ -66,20 +78,20 @@ updates:
 - prediction based on z vector for one y_i, i is row
   predition of number of cluster = which.max(z)
 
-After 489 catch up 2
+# After 489 catch up 2
 
-# simulation
+## simulation
 
 R\data_samulation\cluster_simulation_3.R
 
-# simulation output
+### simulation output
 
 data\simulation_categories_n_cluster_2.csv
 
 include logic:
 - normalise probs by pi
 
-# prediction
+## prediction
 
 R\prediction_baseline\prediction_3_1.R
 

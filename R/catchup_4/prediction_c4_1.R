@@ -172,3 +172,15 @@ conf_matrix <- main(df_path)
 print(conf_matrix)
 
 
+n_of_y_list <- c(30, 50)
+conf_matrix_list <- list()
+
+for (number_of_y in n_of_y_list){
+  print(number_of_y)
+  
+  data_path <- paste0("./data/simulation_y_",number_of_y,"_c4_1.csv")
+  conf_matrix <- main(data_path)
+  print(conf_matrix)
+  conf_matrix_list[[paste(number_of_y)]] <- conf_matrix
+}
+

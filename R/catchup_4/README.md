@@ -1,5 +1,12 @@
+# experiment 2 analysis diff col effects
 
-# experiment of accuracy check for diff number of y
+## code 
+one_cluster_c4_2.R
+
+## result
+not significant difference has been found
+
+# experiment 1 of accuracy check for diff number of y
 
 y >= 30, accuracy reach to large than 98%
 

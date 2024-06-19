@@ -1,6 +1,6 @@
 # During 489 Catch Up 4
 
-in Catch up 4, Louise help me fixed this issue.
+in Catch up 4, Louise help me fixed this issue. in "prediction_way_1_c3_1.R"
 The reason is the PI times in wrong place, leading to PI^n be times.
 That is why cluster with larger PI, tend to be predicted always in the code with this bug.
 

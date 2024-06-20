@@ -12,7 +12,9 @@ G=2 # number of clusters
 q=3 # number of categories
 number_of_y = 10
 alpha=c(1,-1) 
-beta=c(-0.0001, -0.02, -2, 0.01, 0.02, 0.03, 0.05, 0.02, 0.9, 1.2)
+beta=runif(20, min = -2.5, max = 2.5)
+  # c(-0.0001, -0.02, -2, 0.01, 0.02, 0.03, 0.05, 0.02, 0.9, 1.2,
+  #      )
 mu=c(0, 0.6, 0.3) 
 phi=c(0, 0.8, 1)
 cluster_pi = c(0.3, 0.7)
@@ -124,7 +126,7 @@ plot_all_y <- function(df, number_of_y, number_of_y_for_print=10, n_print_col=3)
 }
 
 # 10 Y
-number_of_y <- 10
+number_of_y <- 20
 save_path <- paste0("./data/simulation_y_",number_of_y,"_c4_3.csv")
 
 df_10_y <- data_samping(sample_size, total_sample_size, cluster_pi, q, 

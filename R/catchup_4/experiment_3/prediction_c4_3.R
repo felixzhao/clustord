@@ -12,7 +12,7 @@ library(grid)
 
 ## read data
 # Load the data from the CSV file
-df <- read.csv("./data/simulation_catgories_n_cluster_c3_1.csv", stringsAsFactors = FALSE)
+df <- read.csv("./data/simulation_y_10_c4_1.csv", stringsAsFactors = FALSE)
 
 # Check the structure of the loaded data
 str(df)
@@ -105,21 +105,39 @@ test_cluster <- test_df["cluster"]
 
 # training
 # Model Log(P(Y=k)/P(Y=1))=mu_k+phi_k*rowc_coef_r with 2 row clustering groups:
-results <- clustord(Y~ROWCLUST,model="OSM",2,long.df=train_clust_df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=5)
+results <- clustord(Y~ROWCLUST+COL,model="OSM",2,long.df=train_clust_df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=5)
 
 parlist <- results$parlist.out
 cluster_pi <- results$pi.out
 mu <- parlist$mu 
 phi <- parlist$phi
 alpha <- parlist$rowc
+beta <- parlist$col
 print(mu)
 print(phi)
 print(alpha)
+print(beta)
 print(cluster_pi)
+
+# mock parameters
+# > print(mu)
+# mu        mu 
+# 0.0000000 0.6842247 0.4246565 
+# > print(phi)
+# phi           
+# 0.0000000 0.8014495 1.0000000 
+# > print(alpha)
+# rowc_r           
+# -1.041809  1.041809 
+# > print(beta)
+# col_j        col_j        col_j        col_j        col_j        col_j        col_j        col_j        col_j              
+# 0.005300317  0.032116102  0.042602208  0.015735975 -0.021737176 -0.051025196  0.058449586 -0.020785660 -0.039895783 -0.020760373 
+# > print(cluster_pi)
+# [1] 0.7478282 0.2521718
 
 # prob matrix
 
-get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi) {
+get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi, beta_y) {
   # number of clusters
   G <- length(alpha)
   # number of categories
@@ -130,7 +148,7 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi) {
   for (g in 1:G) {
     probs <- numeric(q)
     for (k in 1:q) {
-      linear <- mu[k] + phi[k] * alpha[g]
+      linear <- mu[k] + phi[k] * (alpha[g] + beta_y)
       if (k > 1) {
         probs[k] <- exp(linear)
       } else {
@@ -150,17 +168,23 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi) {
 }
 
 
+probs_Y <- list()
 
-probs <- get_cluster_prob_matrix(mu, phi, alpha, cluster_pi)
-print("Cluster Prob matrix:")
-probs
+for (j in 1:number_of_y) {
+  beta_y <- beta[j]
+  probs <- get_cluster_prob_matrix(mu, phi, alpha, cluster_pi, beta_y)
+  print("Cluster Prob matrix:")
+  probs
+  probs_Y[[j]] <- probs
+}
 
 
 # prediction
 
 z_prediction <- function(y, probs, cluster_pi) {
   # Extract columns based on y values and combine into matrix p
-  p <- t(sapply(y, function(k) probs[, k]))
+  # p <- t(sapply(y, function(k) probs[, k]))
+  p <- t(sapply(seq_along(y), function(i) probs[[i]][, y[i]]))
   # print(p)
   # Calculate the products of each column
   z <- apply(p, 2, prod)
@@ -179,11 +203,11 @@ cluster_prediction <- function(y, probs, cluster_pi){
 }
 
 ## prediction one observation
-new_obs_predictor <- test_Y[1,]
+new_obs_predictor <- as.numeric(test_Y[1,])
 
-z <- z_prediction(new_obs_predictor, probs, cluster_pi)
+z <- z_prediction(new_obs_predictor, probs_Y, cluster_pi)
 
-one_prediction <- cluster_prediction(new_obs_predictor, probs, cluster_pi)
+one_prediction <- cluster_prediction(new_obs_predictor, probs_Y, cluster_pi)
 
 print(z)
 print(one_prediction)
@@ -194,7 +218,7 @@ predicted <- c()
 
 for (i in 1:nrow(test_Y)){
   new_obs <- as.numeric(as.character(test_Y[i,]))
-  predicted[i] <- cluster_prediction(new_obs, probs, cluster_pi)
+  predicted[i] <- cluster_prediction(new_obs, probs_Y, cluster_pi)
 }
 
 # Accuracy

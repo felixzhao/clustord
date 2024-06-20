@@ -12,7 +12,7 @@ library(grid)
 
 ## read data
 # Load the data from the CSV file
-df <- read.csv("./data/simulation_y_10_c4_1.csv", stringsAsFactors = FALSE)
+df <- read.csv("./data/simulation_y_10_c4_3.csv", stringsAsFactors = FALSE)
 
 # Check the structure of the loaded data
 str(df)

@@ -17,7 +17,7 @@ cluster_pi = runif(5, min = 0, max = 1) #c(0.3, 0.7)
 sample_size <- 2500
 total_sample_size <- sample_size * G
 
-number_of_y = 10
+# number_of_y = 20
 
 cluster_probs <- lapply(1:G, function(x) numeric(q))
 
@@ -120,22 +120,12 @@ plot_all_y <- function(df, number_of_y, number_of_y_for_print=10, n_print_col=3)
   )
 }
 
-# 10 Y
-number_of_y <- 20
-save_path <- paste0("./data/simulation_y_",number_of_y,"_c4_1.csv")
-
-df_10_y <- data_samping(sample_size, total_sample_size, cluster_pi, q, 
-                         cluster_probs, number_of_y
-                         )
-plot_all_y(df_10_y, number_of_y)
-save_data(df_10_y, save_path = save_path)
-
 # simulation for different number of Y
 n_of_y_list <- c(20) #, 30, 50)
 for (number_of_y in n_of_y_list){
   print(number_of_y)
   
-  save_path <- paste0("./data/simulation_y_",number_of_y,"_c4_1.csv")
+  save_path <- paste0("./data/simulation_y_",number_of_y,"_c5_1.csv")
   
   df_10_y <- data_samping(sample_size, total_sample_size, cluster_pi, q, 
                           cluster_probs, number_of_y

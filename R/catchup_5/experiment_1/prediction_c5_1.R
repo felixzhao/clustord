@@ -13,6 +13,11 @@ library(grid)
 
 set.seed(123)
 
+# parameters
+
+n_clusters <- 5
+number_of_y = 20
+
 # funtions
 ## read data
 load_data <- function(data_path){
@@ -80,7 +85,7 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi) {
 training <- function(df){
   # training
   # Model Log(P(Y=k)/P(Y=1))=mu_k+phi_k*rowc_coef_r with 2 row clustering groups:
-  results <- clustord(Y~ROWCLUST,model="OSM",2,long.df=df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=5)
+  results <- clustord(Y~ROWCLUST,model="OSM", n_clusters,long.df=df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=5)
   
 
   parlist <- results$parlist.out
@@ -167,7 +172,7 @@ main <- function(df_path){
   conf_matrix <- evaluation(predicted = predicted, actual = test_cluster)
 }
 
-df_path  <- "./data/simulation_y_20_c4_1.csv"
+df_path  <- paste0("./data/simulation_y_",number_of_y,"_c5_1.csv")
 conf_matrix <- main(df_path)
 print(conf_matrix)
 

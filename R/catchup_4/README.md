@@ -8,6 +8,11 @@ not significant difference has been found
 
 # experiment 1 of accuracy check for diff number of y
 
+## code
+/R/catchup_4/experiment_3/cluster_simulation_c4_3.R
+/R/catchup_4/experiment_3/prediction_c4_3.R
+
+## result
 y >= 30, accuracy reach to large than 98%
 
 ## y = 20

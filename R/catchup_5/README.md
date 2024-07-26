@@ -56,8 +56,8 @@ Confusion Matrix and Statistics
 
           Reference
 Prediction   1   2
-         1 147 153
+         1 146 154
          2   0   0
                                           
-               Accuracy : 0.49            
-                 95% CI : (0.4321, 0.5481)
+               Accuracy : 0.4867          
+                 95% CI : (0.4288, 0.5448)

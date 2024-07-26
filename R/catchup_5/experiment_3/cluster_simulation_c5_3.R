@@ -13,7 +13,7 @@ set.seed(123)
 generate_ordinal_data <- function(n) {
   data <- rnorm(n)
   cuts <- quantile(data, probs = seq(0, 1, length.out = 4))
-  ordinal_data <- cut(data, breaks = cuts, labels = c(0, 1, 2), include.lowest = TRUE)
+  ordinal_data <- cut(data, breaks = cuts, labels = c(1, 2, 3), include.lowest = TRUE)
   ordinal_data <- as.numeric(as.character(ordinal_data))
   return(ordinal_data)
 }

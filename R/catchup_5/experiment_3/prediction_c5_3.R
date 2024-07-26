@@ -167,7 +167,7 @@ main <- function(df_path){
   conf_matrix <- evaluation(predicted = predicted, actual = test_cluster)
 }
 
-df_path  <- "./data/simulation_y_20_c4_1.csv"
+df_path  <- "./data/ordinal_data_frame.csv"
 conf_matrix <- main(df_path)
 print(conf_matrix)
 

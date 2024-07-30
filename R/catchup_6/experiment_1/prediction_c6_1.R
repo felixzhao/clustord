@@ -80,7 +80,7 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi) {
 training <- function(df){
   # training
   # Model Log(P(Y=k)/P(Y=1))=mu_k+phi_k*rowc_coef_r with 2 row clustering groups:
-  results <- clustord(Y~ROWCLUST,model="OSM",3,long.df=df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=5)
+  results <- clustord(Y~ROWCLUST,model="OSM",3,long.df=df, EM.control=list(EMcycles=100,startEMcycles=3), nstarts=10)
   
 
   parlist <- results$parlist.out
@@ -139,8 +139,8 @@ prediction <- function(test_Y, probs, cluster_pi){
 evaluation <- function(predicted, actual){
   # confusion matrix
   # Convert predicted and actual vectors to factors with the same levels
-  predicted <- factor(predicted, levels = c(1, 2))
-  actual <- factor(actual, levels = c(1, 2))
+  predicted <- factor(predicted, levels = c(1, 2, 3))
+  actual <- factor(actual, levels = c(1, 2, 3))
   
   # Calculate confusion matrix
   conf_matrix <- confusionMatrix(predicted, actual)

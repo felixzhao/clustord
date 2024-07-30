@@ -10,7 +10,7 @@ set.seed(123)
 
 G=3 # number of clusters
 q=3 # number of categories
-alpha=c(1, 0, -1) 
+alpha=c(1.5, 0, -1.5) 
 mu=c(0, 0.6, 0.3) 
 phi=c(0, 0.8, 1)
 cluster_pi = c(0.1, 0.3, 0.6)

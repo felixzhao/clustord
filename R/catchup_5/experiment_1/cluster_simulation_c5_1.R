@@ -13,7 +13,8 @@ q=3 # number of categories
 alpha=c(1, 0.5, 0.2, -0.6, -1) 
 mu=c(0, 0.6, 0.3) 
 phi=c(0, 0.8, 1)
-cluster_pi = runif(5, min = 0, max = 1) #c(0.3, 0.7)
+cluster_pi = runif(5, min = 0, max = 1) #c(0.3, 0.7) # may sure all pi adds up to 1 c(0.1, 0.1, 0.2, 0.3, 0.3)
+# c(0.125, 0.125, ) rep function
 sample_size <- 2500
 total_sample_size <- sample_size * G
 

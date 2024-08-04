@@ -14,7 +14,7 @@ save_path = paste0("./data/simulation_y_",number_of_y,"_c6_2.csv")
 G=2 # number of clusters
 q=3 # number of categories
 alpha=c(1,-1) # cluster effects
-beta <- runif(20, min = -20, max = 0) # col effects
+beta <- runif(20, min = 0, max = 1) # col effects
 mu=c(0, 0.6, 0.3) # category effects 1
 phi=c(0, 0.8, 1) # category effects 2
 cluster_pi = c(0.3, 0.7) # cluster proportion

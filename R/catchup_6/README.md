@@ -32,14 +32,16 @@ It looks like part of your problem is probably label switching. Try reordering t
 
 # experiment 2
 
-## desc
+## iterator 1
+
+### desc
 
 Add col effect
 - generate col effect beta by unif, with -20 to 0
 - update formula
 - add prediction to "clustord(Y~ROWCLUST+COL ..."
 
-## results
+### results
 
 Confusion Matrix and Statistics
 
@@ -52,3 +54,23 @@ Prediction   1   2
                  95% CI : (0.1828, 0.2501)
     No Information Rate : 0.6833          
     P-Value [Acc > NIR] : 1         
+
+
+## iterator 2
+
+### desc
+
+- same logic as iterator 1
+- beta generate random unif, with 0 to 1
+
+### results
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2
+         1  83   3
+         2 107 407
+                                          
+               Accuracy : 0.8167          
+                 95% CI : (0.7833, 0.8468)

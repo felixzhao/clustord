@@ -13,3 +13,5 @@ Results_*
 scripts/linguistics/
 *.gif
 docs
+.DS_Store
+data/*.csv

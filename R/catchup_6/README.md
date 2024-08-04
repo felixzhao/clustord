@@ -29,3 +29,26 @@ Overall Statistics
 ## analysis
 
 It looks like part of your problem is probably label switching. Try reordering the fitted clusters in order of decreasing alpha then do predictions based on the reordered clusters. (from Louise)
+
+# experiment 2
+
+## desc
+
+Add col effect
+- generate col effect beta by unif, with -20 to 0
+- update formula
+- add prediction to "clustord(Y~ROWCLUST+COL ..."
+
+## results
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2
+         1   0 281
+         2 190 129
+                                          
+               Accuracy : 0.215           
+                 95% CI : (0.1828, 0.2501)
+    No Information Rate : 0.6833          
+    P-Value [Acc > NIR] : 1         

@@ -74,3 +74,50 @@ Prediction   1   2
                                           
                Accuracy : 0.8167          
                  95% CI : (0.7833, 0.8468)
+
+# experiment 3
+
+## desc
+2 cluster, 20 Ys and 1000 rows
+ClstOrd include Col effect
+
+### simulation steps
+
+- each Ys in same cluster generated from same Normal Distrion with same argus
+- from the inveistgation of two cluster dist and cuts
+  - cluster 1, from N(0, 6)
+  - cluster 2, from N(3, 8)
+  - all cluster cuts at same value to 3 catgories, which is 0 and 2.5
+- dataset combine all cluster dataframe to one
+
+### prediction step
+
+- Call ClstOrd with COL effect
+- load col argus from ClstOrd result
+
+## code
+
+- dist plot: ./experment_3/two_normal_dist_plot.R
+- cuts code invesigation: ./experment_3/invistigation_cut_normal_dist.R
+- distribution_simulation: ./experment_3/cluster_dist_simulation_c6_3.R
+- predict_dist: ./experment_3/prediction_c6_3.R
+
+## data
+
+../data/dist_simulation_y_20_c6_3.csv
+
+## results
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2
+         1   3 153
+         2 144   0
+                                          
+               Accuracy : 0.01            
+                 95% CI : (0.0021, 0.0289)
+    No Information Rate : 0.51            
+    P-Value [Acc > NIR] : 1.0000          
+                                          
+                  Kappa : -0.9784  

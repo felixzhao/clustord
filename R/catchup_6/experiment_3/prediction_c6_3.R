@@ -14,7 +14,7 @@ set.seed(123)
 
 # arguments
 number_of_y <- 20
-df_path = paste0("./data/simulation_y_",number_of_y,"_c6_3.csv")
+df_path = paste0("./data/dist_simulation_y_",number_of_y,"_c6_3.csv")
 
 # funtions
 ## read data
@@ -47,7 +47,7 @@ load_data <- function(data_path){
 
 ## get prob matrix
 
-get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi, number_of_y) {
+get_cluster_prob_matrix <- function(mu, phi, alpha, beta, cluster_pi, number_of_y) {
   # number of clusters
   G <- length(alpha)
   # number of categories
@@ -92,13 +92,14 @@ training <- function(df, number_of_y){
   mu <- parlist$mu 
   phi <- parlist$phi
   alpha <- parlist$rowc
+  beta <- parlist$col
   
   print(mu)
   print(phi)
   print(alpha)
   print(cluster_pi)
   
-  probs <- get_cluster_prob_matrix(mu, phi, alpha, cluster_pi, number_of_y)
+  probs <- get_cluster_prob_matrix(mu, phi, alpha, beta, cluster_pi, number_of_y)
   print("Cluster Prob matrix:")
   probs
   

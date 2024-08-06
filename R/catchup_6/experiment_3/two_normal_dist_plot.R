@@ -3,11 +3,11 @@ library(ggplot2)
 
 # Specify the means and variances
 mean1 <- 0
-variance1 <- 1
+variance1 <- 6
 sd1 <- sqrt(variance1)
 
 mean2 <- 3
-variance2 <- 6
+variance2 <- 8
 sd2 <- sqrt(variance2)
 
 # Create a data frame with x values and corresponding normal densities for both distributions
@@ -28,4 +28,8 @@ ggplot(data_long, aes(x = x, y = Density, color = Distribution)) +
   ggtitle("Two Normal Distributions") +
   xlab("x") +
   ylab("Density") +
-  theme_minimal()
+  theme_minimal() +
+  scale_x_continuous(breaks = seq(floor(min(data$x)), ceiling(max(data$x)), by = 1)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "green", size = 1) +
+  geom_vline(xintercept = 2.5, linetype = "dashed", color = "orange", size = 1)
+  

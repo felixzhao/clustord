@@ -4,55 +4,22 @@ library(gridExtra)
 library(tidyr)
 
 # parameters
-n <- 100
-n_y <- 1
+n <- 1000
+n_y <- 20
 
 save_path <- paste0("./data/dist_simulation_y_", n_y, "_c6_3.csv")
 
 # Set seed for reproducibility
 set.seed(123)
 
-# # Function to generate a vector of unique cuts starting from 0 and ending at 1
-# generate_cuts <- function(n) {
-#   if (n <= 2) {
-#     return(sort(c(0, 1)))
-#   }
-#   cuts <- unique(round(runif(n - 2, min = 0, max = 1), 2))
-#   while(length(cuts) < (n - 2)) {
-#     cuts <- unique(c(cuts, round(runif(n - length(cuts) - 2, min = 0, max = 1), 2)))
-#   }
-#   cuts <- sort(c(0, cuts[1:(n - 2)], 1))
-#   return(cuts)
-# }
-
-# Function to generate a vector of unique cuts from a uniform distribution
-generate_cuts <- function(n) {
-  cuts <- sort(runif(n - 2, min = 0, max = 1))
-  cuts <- unique(c(0, cuts, 1)) # Ensure cuts start from 0 and end at 1 and are unique
-  while(length(cuts) < n) {
-    # If the length of cuts is less than n, generate a new cut and add it
-    new_cut <- runif(1, min = 0, max = 1)
-    cuts <- sort(unique(c(cuts, new_cut)))
-  }
-  return(round(cuts, 2))
-}
-
-# generate cuts prob vectors
-list_of_cuts <- lapply(1:20, function(x) generate_cuts(4))
-
-
-
 # Function to generate ordinal data
-generate_ordinal_data <- function(n, mean, var, probs) {
-  print(probs)
+generate_ordinal_data <- function(n, mean, var) {
   print(mean)
   print(var)
-  data <- rnorm(n, mean, var)
+  data <- rnorm(n,  mean = mean, sd = sqrt(var))
   print(min(data))
   print(max(data))
-  cuts <- quantile(data, probs = probs)
-  print(cuts)
-  ordinal_data <- cut(data, breaks = cuts, labels = c(1, 2, 3), include.lowest = TRUE)
+  ordinal_data <- cut(data, breaks = c(-Inf, 0, 2.5, Inf), labels = c(1, 2, 3), include.lowest = TRUE)
   ordinal_data <- as.numeric(as.character(ordinal_data))
   return(ordinal_data)
 }
@@ -60,12 +27,8 @@ generate_ordinal_data <- function(n, mean, var, probs) {
 # Generate datasets
 
 ## Generate Cluster
-generate_cluster_data <- function(n, mean, var, list_of_probs, cluster_idx) {
-  ordinal_datasets <- lapply(1:n_y, function(i) {
-    prob_vector <- list_of_probs[[i]]
-    generate_ordinal_data(n, mean, var, prob_vector)
-  }
-  )
+generate_cluster_data <- function(n_y, n, mean, var, cluster_idx) {
+  ordinal_datasets <- replicate(n_y, generate_ordinal_data(n, mean, var), simplify = FALSE)
   
   # Create a data frame
   ordinal_data_frame <- do.call(cbind, ordinal_datasets)
@@ -81,10 +44,10 @@ generate_cluster_data <- function(n, mean, var, list_of_probs, cluster_idx) {
   return(df2)
 }
 
-## Plot Cluster
-plot_cluster <- function(df){
+## Plot dataframe
+plot_df <- function(df){
   # Reshape the data to long format using pivot_longer
-  ordinal_data_long <- pivot_longer(as.data.frame(df[, 1:1]), 
+  ordinal_data_long <- pivot_longer(as.data.frame(df[, 1:10]), 
                                     cols = everything(), 
                                     names_to = "Variable", 
                                     values_to = "Value")
@@ -103,19 +66,25 @@ plot_cluster <- function(df){
 # Generate 
 # cluster 1
 mean_cluster_1 <- 0
-var_cluster_1 <- 1
+var_cluster_1 <- 6
 n_cluster_1 <- n / 2
 cluster_1_idx <- 1
-df_cluster1 <- generate_cluster_data(n_cluster_1, mean_cluster_1, var_cluster_1, list_of_cuts, cluster_1_idx)
-plot_cluster(df_cluster1)
+df_cluster1 <- generate_cluster_data(n_y, n_cluster_1, mean_cluster_1, var_cluster_1, cluster_1_idx)
+plot_df(df_cluster1)
 
 # cluster 2
-mean_cluster_2 <- 30
-var_cluster_2 <- 60
+mean_cluster_2 <- 3
+var_cluster_2 <- 8
 n_cluster_2 <- n / 2
 cluster_2_idx <- 2
-df_cluster2 <- generate_cluster_data(n_cluster_2, mean_cluster_2, var_cluster_2, list_of_cuts, cluster_2_idx)
-plot_cluster(df_cluster2)
+df_cluster2 <- generate_cluster_data(n_y, n_cluster_2, mean_cluster_2, var_cluster_2, cluster_2_idx)
+plot_df(df_cluster2)
+
+combined_df <- rbind(df_cluster1, df_cluster2)
+print(summary(combined_df))
+print(head(combined_df, 5))
+print(tail(combined_df, 5))
+plot_df(combined_df)
 
 # Save the dataframe to a CSV file for further use if needed
-#write.csv(df2, save_path, row.names = FALSE)
+write.csv(combined_df, save_path, row.names = FALSE)

@@ -154,3 +154,37 @@ Prediction   1   2
                Accuracy : 1          
                  95% CI : (0.9878, 1)
     No Information Rate : 0.51       
+
+# expereiment 3 - 3
+
+## desc
+
+- same logic as e3
+- two cluster, cut from Normal dist,
+  - C1 ~ N(-1,1)
+  - C2 ~ N(1.5,2)
+  - same cuts, -1, 1
+- Acc:1, is this overfitting?
+
+## code
+
+- under
+./experment_3/e3_3
+
+## result
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2
+         1 147   0
+         2   0 153
+                                     
+               Accuracy : 1          
+                 95% CI : (0.9878, 1)
+    No Information Rate : 0.51       
+    P-Value [Acc > NIR] : < 2.2e-16  
+                                     
+                  Kappa : 1          
+                                     
+ Mcnemar's Test P-Value : NA 

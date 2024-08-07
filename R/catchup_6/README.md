@@ -95,6 +95,10 @@ ClstOrd include Col effect
 - Call ClstOrd with COL effect
 - load col argus from ClstOrd result
 
+### fix label switching
+
+- after sort alpha (rowc), 2 cluster label switching solved.
+
 ## code
 
 - dist plot: ./experment_3/two_normal_dist_plot.R
@@ -112,12 +116,12 @@ Confusion Matrix and Statistics
 
           Reference
 Prediction   1   2
-         1   3 153
-         2 144   0
+         1 144   0
+         2   3 153
                                           
-               Accuracy : 0.01            
-                 95% CI : (0.0021, 0.0289)
+               Accuracy : 0.99            
+                 95% CI : (0.9711, 0.9979)
     No Information Rate : 0.51            
-    P-Value [Acc > NIR] : 1.0000          
+    P-Value [Acc > NIR] : <2e-16          
                                           
-                  Kappa : -0.9784  
+                  Kappa : 0.98  

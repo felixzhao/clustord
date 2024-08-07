@@ -91,7 +91,7 @@ training <- function(df, number_of_y){
   cluster_pi <- results$pi.out
   mu <- parlist$mu 
   phi <- parlist$phi
-  alpha <- parlist$rowc
+  alpha <- sort(parlist$rowc)
   beta <- parlist$col
   
   print(mu)

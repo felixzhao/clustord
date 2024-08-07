@@ -45,8 +45,8 @@ Prediction   1   2
 
 ## code
 /R/catchup_5/experiment_3/generate_ordinal_from_normal_dist.R
-/R/catchup_5/experiment_3/cluster_simulation_c5_1.R
-/R/catchup_5/experiment_3/prediction_c5_1.R
+/R/catchup_5/experiment_3/cluster_simulation_c5_3.R
+/R/catchup_5/experiment_3/prediction_c5_3.R
 
 ## desc
 20 Ys, same normal dist, random cut

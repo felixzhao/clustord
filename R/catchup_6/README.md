@@ -9,6 +9,7 @@
 - update alpha, with larger difference, c(1.5, 0, -1.5)
 - sample size 2500
 - number of Y is 20
+- after sort alpha, label switching resolved.
 
 ## results
 
@@ -16,19 +17,39 @@ Confusion Matrix and Statistics
 
           Reference
 Prediction    1    2    3
-         1   77  567   62
-         2    0   78 1301
-         3  144   21    0
+         1    0   31 1213
+         2   97  624  150
+         3  124   11    0
 
 Overall Statistics
                                           
-               Accuracy : 0.0689          
-                 95% CI : (0.0588, 0.0801)
-    No Information Rate : 0.6058      
+               Accuracy : 0.2773          
+                 95% CI : (0.2589, 0.2963)
+    No Information Rate : 0.6058          
+    P-Value [Acc > NIR] : 1               
+                                          
+                  Kappa : 0.0907          
+                                          
+ Mcnemar's Test P-Value : <2e-16          
+
+Statistics by Class:
+
+                     Class: 1 Class: 2 Class: 3
+Sensitivity           0.00000   0.9369   0.0000
+Specificity           0.38689   0.8441   0.8478
+Pos Pred Value        0.00000   0.7164   0.0000
+Neg Pred Value        0.78032   0.9695   0.3556
+Prevalence            0.09822   0.2960   0.6058
+Detection Rate        0.00000   0.2773   0.0000
+Detection Prevalence  0.55289   0.3871   0.0600
+Balanced Accuracy     0.19345   0.8905   0.4239 
 
 ## analysis
 
-It looks like part of your problem is probably label switching. Try reordering the fitted clusters in order of decreasing alpha then do predictions based on the reordered clusters. (from Louise)
+- It looks like part of your problem is probably label switching. Try reordering the fitted clusters in order of decreasing alpha then do predictions based on the reordered clusters. (from Louise)
+  - resolved, by sort alpha
+
+- the acc still not idea
 
 # experiment 2
 

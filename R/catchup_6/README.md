@@ -125,3 +125,32 @@ Prediction   1   2
     P-Value [Acc > NIR] : <2e-16          
                                           
                   Kappa : 0.98  
+
+# expereiment 3 - 2
+
+## desc
+
+- same logic as e3
+- two cluster, cut from Normal dist,
+  - C1 ~ N(0,1)
+  - C2 ~ N(4,2)
+  - same cuts, 1, 2.5
+- Acc:1, is this overfitting?
+
+## code
+
+- under
+./experment_3/e3_2
+
+## result
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2
+         1 147   0
+         2   0 153
+                                     
+               Accuracy : 1          
+                 95% CI : (0.9878, 1)
+    No Information Rate : 0.51       

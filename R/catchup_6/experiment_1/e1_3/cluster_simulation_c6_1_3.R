@@ -8,12 +8,12 @@ set.seed(123)
 
 # prob matrix for each Y, in current stage suppose all same.
 
-G=5 # number of clusters
+G=8 # number of clusters
 q=3 # number of categories
-alpha=c(1.5, 1, 0, -1, -1.5) 
+alpha=c(2.5, 1.5, 1, 0, -1, -1.5, -2.5, -3.5) 
 mu=c(0, 0.6, 0.3) 
 phi=c(0, 0.8, 1)
-cluster_pi = c(0.1, 0.15, 0.2, 0.25, 0.3)
+cluster_pi = c(0.1, 0.1, 0.1, 0.1, 0.15 ,0.15 ,0.15 , 0.15)
 sample_size <- 2500
 total_sample_size <- sample_size * G
 
@@ -122,7 +122,7 @@ plot_all_y <- function(df, number_of_y, number_of_y_for_print=10, n_print_col=3)
 
 # 20 Y
 number_of_y <- 20
-save_path <- paste0("./data/simulation_y_",number_of_y,"_c6_1_2.csv")
+save_path <- paste0("./data/simulation_y_",number_of_y,"_c6_1_3.csv")
 
 df_10_y <- data_samping(sample_size, total_sample_size, cluster_pi, q, 
                          cluster_probs, number_of_y

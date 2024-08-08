@@ -80,7 +80,7 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi) {
 training <- function(df){
   # training
   # Model Log(P(Y=k)/P(Y=1))=mu_k+phi_k*rowc_coef_r with 2 row clustering groups:
-  results <- clustord(Y~ROWCLUST,model="OSM",5,long.df=df, EM.control=list(EMcycles=100,startEMcycles=3), nstarts=10)
+  results <- clustord(Y~ROWCLUST,model="OSM", 8,long.df=df, EM.control=list(EMcycles=100,startEMcycles=3), nstarts=10)
   
 
   parlist <- results$parlist.out
@@ -167,7 +167,7 @@ main <- function(df_path){
   conf_matrix <- evaluation(predicted = predicted, actual = test_cluster)
 }
 
-df_path  <- "./data/simulation_y_20_c6_1_2.csv"
+df_path  <- "./data/simulation_y_20_c6_1_3.csv"
 conf_matrix <- main(df_path)
 print(conf_matrix)
 

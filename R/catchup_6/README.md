@@ -51,6 +51,59 @@ Balanced Accuracy     0.19345   0.8905   0.4239
 
 - the acc still not idea
 
+
+## c6 e1-2
+
+### desc
+
+- 5 clusters
+- fixed label switching
+
+### result
+
+> print(conf_matrix)
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2   3
+         1   0   0  15
+         2   0   1 104
+         3   9  65 383
+
+Overall Statistics
+                                          
+               Accuracy : 0.6655          
+                 95% CI : (0.6254, 0.7039)
+    No Information Rate : 0.87            
+    P-Value [Acc > NIR] : 1               
+                                          
+                  Kappa : -0.1546         
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: 1 Class: 2 Class: 3
+Sensitivity            0.0000 0.015152 0.762948
+Specificity            0.9736 0.796477 0.013333
+Pos Pred Value         0.0000 0.009524 0.838074
+Neg Pred Value         0.9840 0.862288 0.008333
+Prevalence             0.0156 0.114385 0.870017
+Detection Rate         0.0000 0.001733 0.663778
+Detection Prevalence   0.0260 0.181976 0.792028
+Balanced Accuracy      0.4868 0.405815 0.388141
+
+## c6 e1-3
+
+### desc
+
+- 8 clusters
+- fixed label switching
+
+### result
+
+In Progress
+
 # experiment 2
 
 ## iterator 1

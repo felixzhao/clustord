@@ -11,30 +11,34 @@ set.seed(123)
 G=3 # number of clusters
 q=3 # number of categories
 alpha=c(1.5, 0, -1.5) 
+beta <- runif(20, min = 0, max = 1) # col effects
 mu=c(0, 0.6, 0.3) 
 phi=c(0, 0.8, 1)
 cluster_pi = c(0.1, 0.3, 0.6)
 sample_size <- 2500
 total_sample_size <- sample_size * G
 
-number_of_y = 10
+number_of_y = 20
 
 cluster_probs <- lapply(1:G, function(x) numeric(q))
 
 for (g in 1:G) {
-  probs <- numeric(q)
-  for (j in 1: number_of_y) { # j loop must be out of k loop
-    for (k in 1:q) {
+  # probs <- numeric(q)
+  category_probs <- lapply(1:q, function(x) numeric(number_of_y))
+  for (k in 1:q) {
+    probs <- numeric(q)
+    for (j in 1: number_of_y) { # j loop must be out of k loop
       linear <- mu[k] + phi[k] * (alpha[g] + beta[j])
       if (k > 1) {
-        probs[k] <- exp(linear)
+        probs[j] <- exp(linear)
       } else {
-        probs[k] <- 1
+        probs[j] <- 1
       }
     }
     # probs[j] <- prob[j] / sum(prob[j]) # normalise k for each j # 2 dim, j, k
+    category_probs[[k]] <- probs / sum(probs)
   }
-  cluster_probs[[g]] <- probs # 3 dim, g, j, k
+  cluster_probs[[g]] <- category_probs # 3 dim, g, j, k
   # cluster_probs[[g]] <- probs/sum(probs) # no need this 
 }
 
@@ -125,7 +129,6 @@ plot_all_y <- function(df, number_of_y, number_of_y_for_print=10, n_print_col=3)
 }
 
 # 10 Y
-number_of_y <- 20
 save_path <- paste0("./data/simulation_y_",number_of_y,"_c7_1.csv")
 
 df_10_y <- data_samping(sample_size, total_sample_size, cluster_pi, q, 
@@ -133,17 +136,3 @@ df_10_y <- data_samping(sample_size, total_sample_size, cluster_pi, q,
                          )
 plot_all_y(df_10_y, number_of_y)
 save_data(df_10_y, save_path = save_path)
-
-# # simulation for different number of Y
-# n_of_y_list <- c(20, 30, 50)
-# for (number_of_y in n_of_y_list){
-#   print(number_of_y)
-#   
-#   save_path <- paste0("./data/simulation_y_",number_of_y,"_c6_1.csv")
-#   
-#   df_10_y <- data_samping(sample_size, total_sample_size, cluster_pi, q, 
-#                           cluster_probs, number_of_y
-#   )
-#   plot_all_y(df_10_y, number_of_y)
-#   save_data(df_10_y, save_path = save_path)
-# }

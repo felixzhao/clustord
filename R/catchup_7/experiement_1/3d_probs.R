@@ -28,13 +28,21 @@ for (g in 1:G) {
       } else {
         probs[j] <- 1
       }
+      
+      print(paste("G", g, "; q:", k, "; j:", j))
+      print(paste("mu", mu[k], "phi", phi[k], "alpha", alpha[g], "beta", beta[j]))
+      print(paste("linear", linear))
+      print(paste("exp linear", exp(linear)))
     }
-    # probs[j] <- prob[j] / sum(prob[j]) # normalise k for each j # 2 dim, j, k
-    # category_probs[[k]] <- probs / sum(probs)
-    category_probs[[k]] <- probs
+    
+    print(paste("G", g, "; q:", k))
+    print(paste("before", probs))
+    
+    category_probs[[k]] <- probs / sum(probs) # normalise k for each j # 2 dim, j, k
+    
+    print(paste("after",category_probs[[k]]))
   }
   cluster_probs[[g]] <- category_probs # 3 dim, g, j, k
-  # cluster_probs[[g]] <- probs/sum(probs) # no need this 
 }
 
-cluster_probs
+cluster_probs[[1]][[2]]

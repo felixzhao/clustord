@@ -23,10 +23,9 @@ number_of_y = 20
 cluster_probs <- lapply(1:G, function(x) numeric(q))
 
 for (g in 1:G) {
-  # probs <- numeric(q)
   category_probs <- lapply(1:q, function(x) numeric(number_of_y))
   for (k in 1:q) {
-    probs <- numeric(q)
+    probs <- numeric(number_of_y)
     for (j in 1: number_of_y) { # j loop must be out of k loop
       linear <- mu[k] + phi[k] * (alpha[g] + beta[j])
       if (k > 1) {
@@ -35,11 +34,9 @@ for (g in 1:G) {
         probs[j] <- 1
       }
     }
-    # probs[j] <- prob[j] / sum(prob[j]) # normalise k for each j # 2 dim, j, k
-    category_probs[[k]] <- probs / sum(probs)
+    category_probs[[k]] <- probs / sum(probs) # normalise k for each j # 2 dim, j, k
   }
   cluster_probs[[g]] <- category_probs # 3 dim, g, j, k
-  # cluster_probs[[g]] <- probs/sum(probs) # no need this 
 }
 
 # sampling

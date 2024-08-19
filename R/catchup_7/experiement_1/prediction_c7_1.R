@@ -10,8 +10,11 @@ library(ggplot2)
 library(gridExtra)
 library(grid)
 
-
 set.seed(123)
+
+# arguments
+number_of_y <- 20
+df_path = paste0("./data/simulation_y_",number_of_y,"_c7_1.csv")
 
 # funtions
 ## read data
@@ -44,7 +47,7 @@ load_data <- function(data_path){
 
 ## get prob matrix
 
-get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi) {
+get_cluster_prob_matrix <- function(mu, phi, alpha, beta, cluster_pi, number_of_y) {
   # number of clusters
   G <- length(alpha)
   # number of categories
@@ -53,17 +56,21 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi) {
   cluster_probs <- lapply(1:G, function(x) numeric(q))
   
   for (g in 1:G) {
-    probs <- numeric(q)
+    category_probs <- lapply(1:q, function(x) numeric(number_of_y))
     for (k in 1:q) {
-      linear <- mu[k] + phi[k] * alpha[g]
-      if (k > 1) {
-        probs[k] <- exp(linear)
-      } else {
-        probs[k] <- 1
+      probs <- numeric(number_of_y)
+      for (j in 1: number_of_y) { # j loop must be out of k loop
+        linear <- mu[k] + phi[k] * (alpha[g] + beta[j])
+        if (k > 1) {
+          probs[j] <- exp(linear)
+        } else {
+          probs[j] <- 1
+        }
       }
+      category_probs[[k]] <- probs #/ sum(probs) # normalise k for each j # 2 dim, j, k
     }
-    # normalize
-    cluster_probs[[g]] <- probs/sum(probs)
+    sum_flattened_list <- sum(unlist(category_probs))
+    cluster_probs[[g]] <- category_probs # 3 dim, g, j, k
   }
   
   # Adjust each cluster's probabilities by multiplying with corresponding pi
@@ -77,29 +84,30 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, cluster_pi) {
 
 ## training
 
-training <- function(df){
+training <- function(df, number_of_y){
   # training
   # Model Log(P(Y=k)/P(Y=1))=mu_k+phi_k*rowc_coef_r with 2 row clustering groups:
-  results <- clustord(Y~ROWCLUST,model="OSM",3,long.df=df, EM.control=list(EMcycles=100,startEMcycles=3), nstarts=10)
+  results <- clustord(Y~ROWCLUST+COL,model="OSM",2,long.df=df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=5)
   
-
+  
   parlist <- results$parlist.out
   cluster_pi <- results$pi.out
   mu <- parlist$mu 
   phi <- parlist$phi
   alpha <- sort(parlist$rowc)
+  beta <- parlist$col
   
   print(mu)
   print(phi)
   print(alpha)
   print(cluster_pi)
   
-  probs <- get_cluster_prob_matrix(mu, phi, alpha, cluster_pi)
+  probs <- get_cluster_prob_matrix(mu, phi, alpha, beta, cluster_pi, number_of_y)
   print("Cluster Prob matrix:")
   probs
   
   return(list(probs=probs, cluster_pi=cluster_pi))
-
+  
 }
 
 ### prediction
@@ -139,8 +147,8 @@ prediction <- function(test_Y, probs, cluster_pi){
 evaluation <- function(predicted, actual){
   # confusion matrix
   # Convert predicted and actual vectors to factors with the same levels
-  predicted <- factor(predicted, levels = c(1, 2, 3))
-  actual <- factor(actual, levels = c(1, 2, 3))
+  predicted <- factor(predicted, levels = c(1, 2))
+  actual <- factor(actual, levels = c(1, 2))
   
   # Calculate confusion matrix
   conf_matrix <- confusionMatrix(predicted, actual)
@@ -151,13 +159,13 @@ evaluation <- function(predicted, actual){
 
 # main
 
-main <- function(df_path){
+main <- function(df_path, number_of_y){
   data_dfs <- load_data(df_path)
   train_df <- data_dfs$train_df
   test_Y <- data_dfs$test_Y
   test_cluster <- data_dfs$test_cluster$cluster
   
-  model <- training(data_dfs$train_df)
+  model <- training(data_dfs$train_df, number_of_y)
   
   probs <- model$probs
   cluster_pi <- model$cluster_pi
@@ -167,8 +175,7 @@ main <- function(df_path){
   conf_matrix <- evaluation(predicted = predicted, actual = test_cluster)
 }
 
-df_path  <- "./data/simulation_y_20_c7_1.csv"
-conf_matrix <- main(df_path)
+conf_matrix <- main(df_path, number_of_y)
 print(conf_matrix)
 
 
@@ -178,9 +185,9 @@ print(conf_matrix)
 # for (number_of_y in n_of_y_list){
 #   print(number_of_y)
 #   
-#   data_path <- paste0("./data/simulation_y_",number_of_y,"_c6_1.csv")
+#   data_path <- paste0("./data/simulation_y_",number_of_y,"_c4_1.csv")
 #   conf_matrix <- main(data_path)
 #   print(conf_matrix)
 #   conf_matrix_list[[paste(number_of_y)]] <- conf_matrix
 # }
-
+# 

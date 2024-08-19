@@ -11,14 +11,14 @@ set.seed(123)
 G=2 # number of clusters
 q=3 # number of categories
 alpha= c(-1, 0.8) #c(1.5, 0, -1.5) 
-beta <- runif(3, min = 0, max = 1) # col effects
+beta <- runif(20, min = 0, max = 1) # col effects
 mu=c(0, 0.6, 0.3) 
 phi=c(0, 0.8, 1)
 cluster_pi = c(0.1, 0.3, 0.6)
 sample_size <- 2500
 total_sample_size <- sample_size * G
 
-number_of_y = 3
+number_of_y = 20
 
 cluster_probs <- lapply(1:G, function(x) numeric(q))
 

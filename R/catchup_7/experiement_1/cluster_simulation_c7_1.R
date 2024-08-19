@@ -8,17 +8,17 @@ set.seed(123)
 
 # prob matrix for each Y, in current stage suppose all same.
 
-G=3 # number of clusters
+G=2 # number of clusters
 q=3 # number of categories
-alpha=c(1.5, 0, -1.5) 
-beta <- runif(20, min = 0, max = 1) # col effects
+alpha= c(-1, 0.8) #c(1.5, 0, -1.5) 
+beta <- runif(3, min = 0, max = 1) # col effects
 mu=c(0, 0.6, 0.3) 
 phi=c(0, 0.8, 1)
 cluster_pi = c(0.1, 0.3, 0.6)
 sample_size <- 2500
 total_sample_size <- sample_size * G
 
-number_of_y = 20
+number_of_y = 3
 
 cluster_probs <- lapply(1:G, function(x) numeric(q))
 
@@ -33,9 +33,15 @@ for (g in 1:G) {
       } else {
         probs[j] <- 1
       }
+      print(paste( g,k,j))
+      print(paste( mu[k], phi[k], alpha[g], beta[j]))
+      print(paste('linear', linear))
     }
-    category_probs[[k]] <- probs / sum(probs) # normalise k for each j # 2 dim, j, k
+    print(paste('probs', probs))
+    print(paste('norm probs', probs / sum(probs)))
+    category_probs[[k]] <- probs #/ sum(probs) # normalise k for each j # 2 dim, j, k
   }
+  sum_flattened_list <- sum(unlist(category_probs))
   cluster_probs[[g]] <- category_probs # 3 dim, g, j, k
 }
 
@@ -85,7 +91,7 @@ data_samping <- function(sample_size, total_sample_size, cluster_pi, q,
 
 }
 
-save_data <- function(df, save_path = "./data/simulation_catgories_n_cluster_c4_1.csv"){
+save_data <- function(df, save_path = "./data/simulation_catgories_n_cluster_c7_1.csv"){
   # save to csv file
   write.csv(df, save_path , row.names=FALSE)
   print(paste("Save data to",save_path,"Done."))
@@ -107,7 +113,7 @@ plot_y <- function(df, y_idx) {
 }
 
 plot_all_y <- function(df, number_of_y, number_of_y_for_print=10, n_print_col=3)  { 
-  df <- df[,1:11]
+  # df <- df[,1:3]
   plots <- list()
   for (i in 1:number_of_y_for_print){
     plots[[i]] <- plot_y(df, i)

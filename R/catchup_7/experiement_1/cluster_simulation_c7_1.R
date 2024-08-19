@@ -66,7 +66,12 @@ data_samping <- function(sample_size, total_sample_size, cluster_pi, q,
                          cluster_probs, number_of_y) {
 
   # Create a list of N dataframes
-  dataframes <- lapply(1:number_of_y, function(i) y_sampling(sample_size, total_sample_size, cluster_pi, q, cluster_probs, i))
+  dataframes <- lapply(1:number_of_y, function(i) {
+    col_cluster_probs <- lapply(cluster_probs, function(cluster) {
+      sapply(cluster, function(sublist) sublist[i])
+    })
+    y_sampling(sample_size, total_sample_size, cluster_pi, q, col_cluster_probs, i)
+    })
   
   # Merge all dataframes
   merged_df <- reduce(dataframes, function(df1, df2) {

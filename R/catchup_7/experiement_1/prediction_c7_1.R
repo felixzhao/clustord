@@ -100,21 +100,28 @@ training <- function(df, number_of_y){
   print(mu)
   print(phi)
   print(alpha)
+  print(beta)
   print(cluster_pi)
   
   probs <- get_cluster_prob_matrix(mu, phi, alpha, beta, cluster_pi, number_of_y)
   print("Cluster Prob matrix:")
   probs
   
-  return(list(probs=probs, cluster_pi=cluster_pi))
+  col_clu_probs <- lapply(1:number_of_y, function(i) {
+         col_cluster_probs <- lapply(cluster_probs, function(cluster) {
+               sapply(cluster, function(sublist) sublist[i])
+         })})
+  
+  return(list(probs=col_clu_probs, cluster_pi=cluster_pi))
   
 }
 
 ### prediction
 
 z_prediction <- function(y, probs, cluster_pi) {
+  probs_matrix <- do.call(rbind, probs)
   # Extract columns based on y values and combine into matrix p
-  p <- t(sapply(y, function(k) probs[, k]))
+  p <- t(sapply(y, function(k) probs_matrix[, k]))
   # print(p)
   # Calculate the products of each column
   z <- apply(p, 2, prod)
@@ -132,13 +139,15 @@ cluster_prediction <- function(y, probs, cluster_pi){
   return(which.max(z))
 }
 
-prediction <- function(test_Y, probs, cluster_pi){
+prediction <- function(test_Y, model_probs, cluster_pi){
   ## prediction all test data
   predicted <- c()
   
   for (i in 1:nrow(test_Y)){
+    print(i)
     new_obs <- as.numeric(as.character(test_Y[i,]))
-    predicted[i] <- cluster_prediction(new_obs, probs, cluster_pi)
+    col_probs <- model_probs[[i]]
+    predicted[i] <- cluster_prediction(new_obs, col_probs, cluster_pi)
   }
   return(predicted)
 }
@@ -167,10 +176,10 @@ main <- function(df_path, number_of_y){
   
   model <- training(data_dfs$train_df, number_of_y)
   
-  probs <- model$probs
+  model_probs <- model$probs
   cluster_pi <- model$cluster_pi
   
-  predicted <- prediction(test_Y = test_Y, probs = probs, cluster_pi = cluster_pi)
+  predicted <- prediction(test_Y = test_Y, probs = model_probs, cluster_pi = cluster_pi)
   
   conf_matrix <- evaluation(predicted = predicted, actual = test_cluster)
 }

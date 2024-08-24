@@ -78,7 +78,7 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, beta, cluster_pi, number_of_
   #   cluster * p
   # }, cluster_probs, cluster_pi, SIMPLIFY = FALSE)
   
-  return(do.call(rbind, lapply(cluster_probs, unlist)))
+  return(cluster_probs)#(do.call(rbind, lapply(cluster_probs, unlist)))
 }
 
 
@@ -108,23 +108,29 @@ training <- function(df, number_of_y){
   probs
   
   col_clu_probs <- lapply(1:number_of_y, function(i) {
-         col_cluster_probs <- lapply(cluster_probs, function(cluster) {
+         col_cluster_probs <- 
+           lapply(probs, function(cluster) {
                sapply(cluster, function(sublist) sublist[i])
          })})
   
-  return(list(probs=col_clu_probs, cluster_pi=cluster_pi))
+  return(list(probs=col_clu_probs, cluster_pi=cluster_pi, model=results))
   
 }
 
 ### prediction
 
-z_prediction <- function(y, probs, cluster_pi) {
-  probs_matrix <- do.call(rbind, probs)
-  # Extract columns based on y values and combine into matrix p
-  p <- t(sapply(y, function(k) probs_matrix[, k]))
-  # print(p)
+z_prediction <- function(y, model_probs, cluster_pi) {
+  row_probs <- category_probs <- lapply(1:length(y), function(x) numeric(length(cluster_pi)))
+  for (j in 1: number_of_y) {
+    col_probs <- model_probs[[j]]
+    probs_matrix <- do.call(rbind, col_probs)
+    # Extract columns based on y values and combine into matrix p
+    row_probs[[j]] <- t(sapply(y[j], function(k) probs_matrix[, k]))
+  }
+  
+  row_probs_matrix <- do.call(rbind, row_probs)
   # Calculate the products of each column
-  z <- apply(p, 2, prod)
+  z <- apply(row_probs_matrix, 2, prod)
   
   # Adjust each cluster's probabilities by multiplying with corresponding pi
   adjusted_z <- mapply(function(cluster, p) {
@@ -146,8 +152,7 @@ prediction <- function(test_Y, model_probs, cluster_pi){
   for (i in 1:nrow(test_Y)){
     print(i)
     new_obs <- as.numeric(as.character(test_Y[i,]))
-    col_probs <- model_probs[[i]]
-    predicted[i] <- cluster_prediction(new_obs, col_probs, cluster_pi)
+    predicted[i] <- cluster_prediction(new_obs, model_probs, cluster_pi)
   }
   return(predicted)
 }
@@ -168,7 +173,7 @@ evaluation <- function(predicted, actual){
 
 # main
 
-main <- function(df_path, number_of_y){
+#main <- function(df_path, number_of_y){
   data_dfs <- load_data(df_path)
   train_df <- data_dfs$train_df
   test_Y <- data_dfs$test_Y
@@ -179,12 +184,12 @@ main <- function(df_path, number_of_y){
   model_probs <- model$probs
   cluster_pi <- model$cluster_pi
   
-  predicted <- prediction(test_Y = test_Y, probs = model_probs, cluster_pi = cluster_pi)
+  predicted <- prediction(test_Y = test_Y, model_probs = model_probs, cluster_pi = cluster_pi)
   
   conf_matrix <- evaluation(predicted = predicted, actual = test_cluster)
-}
+#}
 
-conf_matrix <- main(df_path, number_of_y)
+#conf_matrix <- main(df_path, number_of_y)
 print(conf_matrix)
 
 

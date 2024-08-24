@@ -53,24 +53,30 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, beta, cluster_pi, number_of_
   # number of categories
   q <- length(mu)
   
-  cluster_probs <- lapply(1:G, function(x) numeric(q))
+  cluster_probs <- array(0,dim = c( G, number_of_y, q)) #lapply(1:G, function(x) numeric(q))
   
   for (g in 1:G) {
-    category_probs <- lapply(1:q, function(x) numeric(number_of_y))
-    for (k in 1:q) {
-      probs <- numeric(number_of_y)
-      for (j in 1: number_of_y) { # j loop must be out of k loop
-        linear <- mu[k] + phi[k] * (alpha[g] + beta[j])
+    #category_probs <- array() #list() #lapply(1:number_of_y, function(x) numeric(q))
+    for (j in 1: number_of_y) { # j loop must be out of k loop
+      #probs <- numeric(q)
+      for (k in 1:q) {
         if (k > 1) {
-          probs[j] <- exp(linear)
+          linear <- mu[k] + phi[k] * (alpha[g] + beta[j])
+          cluster_probs[g,j, k] <- exp(linear)
         } else {
-          probs[j] <- 1
+          cluster_probs[g,j, k] <- 1
         }
+        # print(paste( g,k,j))
+        # print(paste( mu[k], phi[k], alpha[g], beta[j]))
+        # print(paste('linear', linear))
       }
-      category_probs[[k]] <- probs #/ sum(probs) # normalise k for each j # 2 dim, j, k
+      # print(paste('probs', probs))
+      # print(paste('norm probs', probs / sum(probs)))
+      cluster_probs[g,j,] <- cluster_probs[g,j,] / sum(cluster_probs[g,j,])
+      # category_probs[[j]] <- probs / sum(probs) # normalise k for each j # 2 dim, j, k
     }
-    sum_flattened_list <- sum(unlist(category_probs))
-    cluster_probs[[g]] <- category_probs # 3 dim, g, j, k
+    # sum_flattened_list <- sum(unlist(category_probs))
+    # cluster_probs[[g]] <- category_probs # 3 dim, g, j, k
   }
   
   # Adjust each cluster's probabilities by multiplying with corresponding pi
@@ -107,25 +113,25 @@ training <- function(df, number_of_y){
   print("Cluster Prob matrix:")
   probs
   
-  col_clu_probs <- lapply(1:number_of_y, function(i) {
-         col_cluster_probs <- 
-           lapply(probs, function(cluster) {
-               sapply(cluster, function(sublist) sublist[i])
-         })})
-  
+  # col_clu_probs <- lapply(1:number_of_y, function(i) {
+  #        col_cluster_probs <-
+  #          lapply(probs, function(cluster) {
+  #              sapply(cluster, function(sublist) sublist[i])
+  #        })}) # g,j,k -> j,g,k
+
   return(list(probs=col_clu_probs, cluster_pi=cluster_pi, model=results))
   
 }
 
 ### prediction
 
-z_prediction <- function(y, model_probs, cluster_pi) {
-  row_probs <- category_probs <- lapply(1:length(y), function(x) numeric(length(cluster_pi)))
+z_prediction <- function(y_i, model_probs, cluster_pi) {
+  row_probs <- lapply(1:length(y_i), function(x) numeric(length(cluster_pi)))
   for (j in 1: number_of_y) {
-    col_probs <- model_probs[[j]]
-    probs_matrix <- do.call(rbind, col_probs)
+    # col_probs <- model_probs[,j,]
+    # probs_matrix <- do.call(rbind, col_probs)
     # Extract columns based on y values and combine into matrix p
-    row_probs[[j]] <- t(sapply(y[j], function(k) probs_matrix[, k]))
+    row_probs[[j]] <- t(sapply(y_i[j], function(k) model_probs[,j,k]))
   }
   
   row_probs_matrix <- do.call(rbind, row_probs)
@@ -133,15 +139,18 @@ z_prediction <- function(y, model_probs, cluster_pi) {
   z <- apply(row_probs_matrix, 2, prod)
   
   # Adjust each cluster's probabilities by multiplying with corresponding pi
-  adjusted_z <- mapply(function(cluster, p) {
-    cluster * p
-  }, z, cluster_pi, SIMPLIFY = FALSE)
+  adjusted_z <- cluster_pi * z
+    
+  #   mapply(function(cluster, p) {
+  #   cluster * p
+  # }, z, cluster_pi, SIMPLIFY = FALSE)
   
   return(adjusted_z)
 }
 
 cluster_prediction <- function(y, probs, cluster_pi){
   z <- z_prediction(y, probs, cluster_pi)
+  # the sum of z for each y must be equal to 1
   return(which.max(z))
 }
 

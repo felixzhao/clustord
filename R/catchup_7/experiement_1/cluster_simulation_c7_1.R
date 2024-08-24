@@ -23,18 +23,18 @@ total_sample_size <- sample_size * G
 
 number_of_y = 20
 
-cluster_probs <- lapply(1:G, function(x) numeric(q))
+cluster_probs <- array(0,dim = c( G, number_of_y, q)) #lapply(1:G, function(x) numeric(q))
 
 for (g in 1:G) {
-  category_probs <- list() #lapply(1:number_of_y, function(x) numeric(q))
+  #category_probs <- array() #list() #lapply(1:number_of_y, function(x) numeric(q))
   for (j in 1: number_of_y) { # j loop must be out of k loop
-    probs <- numeric(q)
+    #probs <- numeric(q)
     for (k in 1:q) {
       if (k > 1) {
         linear <- mu[k] + phi[k] * (alpha[g] + beta[j])
-        probs[k] <- exp(linear)
+        cluster_probs[g,j, k] <- exp(linear)
       } else {
-        probs[k] <- 1
+        cluster_probs[g,j, k] <- 1
       }
       # print(paste( g,k,j))
       # print(paste( mu[k], phi[k], alpha[g], beta[j]))
@@ -42,10 +42,11 @@ for (g in 1:G) {
     }
     # print(paste('probs', probs))
     # print(paste('norm probs', probs / sum(probs)))
-    category_probs[[j]] <- probs / sum(probs) # normalise k for each j # 2 dim, j, k
+    cluster_probs[g,j,] <- cluster_probs[g,j,] / sum(cluster_probs[g,j,])
+    # category_probs[[j]] <- probs / sum(probs) # normalise k for each j # 2 dim, j, k
   }
   # sum_flattened_list <- sum(unlist(category_probs))
-  cluster_probs[[g]] <- category_probs # 3 dim, g, j, k
+  # cluster_probs[[g]] <- category_probs # 3 dim, g, j, k
 }
 
 # sampling
@@ -54,6 +55,7 @@ y_sampling <- function(sample_size, total_sample_size, cluster_pi, q, col_cluste
   data_list <- lapply(1:G, function(x) numeric(sample_size))
   
   for (g in 1:G) {
+    
     cluster_sample_size <- total_sample_size * cluster_pi[g]
     data_list[[g]] <- sample(1:q, size = cluster_sample_size, replace = TRUE, prob = col_cluster_probs[[g]])
   }
@@ -74,23 +76,43 @@ y_sampling <- function(sample_size, total_sample_size, cluster_pi, q, col_cluste
 data_samping <- function(sample_size, total_sample_size, cluster_pi, q, 
                          cluster_probs, number_of_y) {
 
+  data_list <- list()
+  clusters <- vector()
   # Create a list of N dataframes
-  dataframes <- lapply(1:number_of_y, function(i) {
-    col_cluster_probs <- lapply(cluster_probs, function(cluster) {
-      sapply(cluster, function(sublist) sublist[i])
-    })
-    y_sampling(sample_size, total_sample_size, cluster_pi, q, col_cluster_probs, i)
-    })
+  for (g in 1:G) {
+    cluster_sample_size <- total_sample_size * cluster_pi[g]
+    clust_matrix <- matrix(0, cluster_sample_size, number_of_y)
+    for (j in 1: number_of_y) {
+      clust_matrix[,j] <- sample(1:q, size = cluster_sample_size, replace = TRUE, prob = cluster_probs[g,j,])
+    }
+    data_list[[g]] <- clust_matrix
+    clusters <- c(clusters, rep(g, cluster_sample_size))
+  }
+  res1 <- do.call(rbind, data_list)
+  res2 <- as.data.frame(cbind(res1, clusters))
+  colnames(res2) <- c(paste0("Y",1:number_of_y), "cluster")
+
+  return(res2)
   
-  # Merge all dataframes
-  merged_df <- reduce(dataframes, function(df1, df2) {
-    inner_join(df1, df2, by = c("cluster", "id"))
-  })
+  # dataframes <- 
+  #   
+  #   lapply(1:number_of_y, function(i) {
+  #   # col_cluster_probs <- cluster_probs[[]]
+  #   #   lapply(cluster_probs, function(cluster) {
+  #   #   sapply(cluster, function(sublist) sublist[i])
+  #   # })
+  #   y_sampling(sample_size, total_sample_size, cluster_pi, q, cluster_probs, i)
+  #   })
+  # 
+   # Merge all dataframes
+   # merged_df <- reduce(data_list, function(df1, df2) {
+   #   inner_join(df1, df2, by = c("cluster", "id"))
+   # })
   
-  # Remove the unique identifier column
-  merged_df <- merged_df %>% select(-id)
-  
-  return(merged_df)
+   # Remove the unique identifier column
+   # merged_df <- res %>% select(-id)
+   # 
+   # return(merged_df)
 
 }
 
@@ -145,5 +167,5 @@ save_path <- paste0("./data/simulation_y_",number_of_y,"_c7_1.csv")
 df_10_y <- data_samping(sample_size, total_sample_size, cluster_pi, q, 
                          cluster_probs, number_of_y
                          )
-plot_all_y(df_10_y, number_of_y)
+# plot_all_y(df_10_y, number_of_y)
 save_data(df_10_y, save_path = save_path)

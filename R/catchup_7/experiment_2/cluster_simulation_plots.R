@@ -6,17 +6,7 @@ library(purrr)
 
 set.seed(123)
 
-G=2
-q=3
-alpha=c(1,-1)
-beta=c(0)
-mu=c(0, 0.6, 0.3)
-phi=c(0, 0.8, 1)
-cluster_pi = c(0.3, 0.7)
-sample_size <- 1000
-total_sample_size <- sample_size * G
 
-number_of_y = 1
 
 # functions
 generate_cluster_probs <- function(
@@ -109,16 +99,16 @@ data_samping <- function(G=2,
                          total_sample_size = sample_size * G,
                          number_of_y = 1) {
   
-  # cluster_probs <- generate_cluster_probs(G, 
-  #                                         q, 
-  #                                         alpha, 
-  #                                         beta,
-  #                                         mu,
-  #                                         phi,
-  #                                         cluster_pi,
-  #                                         sample_size,
-  #                                         total_sample_size,
-  #                                         number_of_y)
+  cluster_probs <- generate_cluster_probs(G,
+                                          q,
+                                          alpha,
+                                          beta,
+                                          mu,
+                                          phi,
+                                          cluster_pi,
+                                          sample_size,
+                                          total_sample_size,
+                                          number_of_y)
   
   # Create a list of N dataframes
   dataframes <- lapply(1:number_of_y, function(i) {
@@ -141,24 +131,38 @@ data_samping <- function(G=2,
 }
 
 # main
-sample_df <- data_samping(sample_size, total_sample_size, cluster_pi, q, 
-                        cluster_probs, number_of_y
-)
+G=2
+q=3
+alpha=c(-1,1)
+beta=c(0)
+mu=c(0, 0.6, 0.3)
+phi=c(0, 0.8, 1)
+cluster_pi = c(0.3, 0.7)
+sample_size <- 1000
+total_sample_size <- sample_size * G
+
+number_of_y = 1
+
+# desc = paste('alpha:',paste(alpha, collapse = ", "))
+# desc = paste('mu:',paste(mu, collapse = ", "))
+# desc = paste('phi:',paste(phi, collapse = ", "))
+desc = paste('pi:',paste(cluster_pi, collapse = ", "))
 
 
-plt_image <- plot_sample(sample_df, 1)
+sample_df <- data_samping()
+plt_image <- plot_sample(sample_df, desc=desc)
 print(plt_image)
 
-# alpha 
-alpha_list <- list(
-  list(-1,0), list(-1,1), list(0,1)
-)
-
-for (cur_alpha in alpha_list){
-  sample_df <- data_samping(alpha=cur_alpha)
-  plt_image <- plot_sample(sample_df, desc=paste('alpha:', cur_alpha))
-  print(plt_image)
-}
+# # alpha 
+# alpha_list <- list(
+#   list(-1,0), list(-1,1), list(0,1)
+# )
+# 
+# for (cur_alpha in alpha_list){
+#   sample_df <- data_samping(alpha=cur_alpha)
+#   plt_image <- plot_sample(sample_df, desc=paste('alpha:',paste(alpha, collapse = ", ")))
+#   print(plt_image)
+# }
 
 
 # plots <- list()

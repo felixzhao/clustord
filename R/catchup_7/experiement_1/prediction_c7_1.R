@@ -119,7 +119,7 @@ training <- function(df, number_of_y){
   #              sapply(cluster, function(sublist) sublist[i])
   #        })}) # g,j,k -> j,g,k
 
-  return(list(probs=col_clu_probs, cluster_pi=cluster_pi, model=results))
+  return(list(probs=probs, cluster_pi=cluster_pi, model=results))
   
 }
 

@@ -1,8 +1,11 @@
+# install.packages("dplyr")
+
 library(rlang)
 library(ggplot2)
 library(gridExtra)
 library(grid)
 library(purrr)
+library(dplyr)
 
 set.seed(123)
 
@@ -47,12 +50,12 @@ for (g in 1:G) {
 
 # sampling
 
-y_sampling <- function(sample_size, total_sample_size, cluster_pi, q, cluster_probs, y_idx) {
+y_sampling <- function(sample_size, total_sample_size, cluster_pi, q, col_cluster_probs, y_idx) {
   data_list <- lapply(1:G, function(x) numeric(sample_size))
   
   for (g in 1:G) {
     cluster_sample_size <- total_sample_size * cluster_pi[g]
-    data_list[[g]] <- sample(1:q, size = cluster_sample_size, replace = TRUE, prob = cluster_probs[[g]])
+    data_list[[g]] <- sample(1:q, size = cluster_sample_size, replace = TRUE, prob = col_cluster_probs[[g]])
   }
   
   # Flatten the list of lists into a single vector

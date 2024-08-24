@@ -13,8 +13,8 @@ set.seed(123)
 
 G=2 # number of clusters
 q=3 # number of categories
-alpha= c(-1, 0.8) #c(1.5, 0, -1.5) 
-beta <- runif(20, min = 0, max = 1) # col effects
+alpha= c(-1, 1) #c(1.5, 0, -1.5) 
+beta <- runif(20, min = -1, max = 1) # col effects
 mu=c(0, 0.6, 0.3) 
 phi=c(0, 0.8, 1)
 cluster_pi = c(0.1, 0.3, 0.6)
@@ -26,25 +26,25 @@ number_of_y = 20
 cluster_probs <- lapply(1:G, function(x) numeric(q))
 
 for (g in 1:G) {
-  category_probs <- lapply(1:q, function(x) numeric(number_of_y))
-  for (k in 1:q) {
-    probs <- numeric(number_of_y)
-    for (j in 1: number_of_y) { # j loop must be out of k loop
-      linear <- mu[k] + phi[k] * (alpha[g] + beta[j])
+  category_probs <- list() #lapply(1:number_of_y, function(x) numeric(q))
+  for (j in 1: number_of_y) { # j loop must be out of k loop
+    probs <- numeric(q)
+    for (k in 1:q) {
       if (k > 1) {
-        probs[j] <- exp(linear)
+        linear <- mu[k] + phi[k] * (alpha[g] + beta[j])
+        probs[k] <- exp(linear)
       } else {
-        probs[j] <- 1
+        probs[k] <- 1
       }
-      print(paste( g,k,j))
-      print(paste( mu[k], phi[k], alpha[g], beta[j]))
-      print(paste('linear', linear))
+      # print(paste( g,k,j))
+      # print(paste( mu[k], phi[k], alpha[g], beta[j]))
+      # print(paste('linear', linear))
     }
-    print(paste('probs', probs))
-    print(paste('norm probs', probs / sum(probs)))
-    category_probs[[k]] <- probs #/ sum(probs) # normalise k for each j # 2 dim, j, k
+    # print(paste('probs', probs))
+    # print(paste('norm probs', probs / sum(probs)))
+    category_probs[[j]] <- probs / sum(probs) # normalise k for each j # 2 dim, j, k
   }
-  sum_flattened_list <- sum(unlist(category_probs))
+  # sum_flattened_list <- sum(unlist(category_probs))
   cluster_probs[[g]] <- category_probs # 3 dim, g, j, k
 }
 

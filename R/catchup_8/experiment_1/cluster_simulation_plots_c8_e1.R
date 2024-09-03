@@ -96,6 +96,20 @@ cluster_probs_list <- lapply(alpha_list, function(alpha) {
 })
 batch_plots(alpha_list, 'alpha', cluster_probs_list)
 
+# beta
+reset_default_para_values()
+number_of_y = 10
+beta_list <- list(
+  c(-0.1, 0.1),
+  c(-1,1), 
+  c(-3,3)
+)
+cluster_probs_list <- lapply(alpha_list, function(alpha) {
+  generate_cluster_probs(G, q, alpha, beta, mu, phi, cluster_pi, 
+                         sample_size, total_sample_size, number_of_y)
+})
+batch_plots(alpha_list, 'alpha', cluster_probs_list)
+
 # mu
 reset_default_para_values()
 mu_list <- list(

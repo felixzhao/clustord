@@ -24,7 +24,7 @@ generate_cluster_probs <- function(G, q, alpha, beta, mu, phi, cluster_pi,
 # sampling
 
 y_sampling <- function(sample_size, total_sample_size, cluster_pi, q, col_cluster_probs, y_idx) {
-  data_list <- lapply(1:G, function(x) numeric(sample_size))
+  data_list <- list()#lapply(1:G, function(x) numeric(sample_size))
   
   for (g in 1:G) {
     

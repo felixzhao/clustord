@@ -6,7 +6,7 @@ plot_sample <- function(df, desc, title="", y_idx=1) {
   
   plot <- ggplot(data1, aes(x = Sample, fill = Cluster)) +
     geom_density(alpha = 0.5) +
-    # geom_bar(position = "stack") +
+    # geom_bar(position = "dodge") +
     # geom_bar() +
     labs(title = title,
          x = "Sample Value",

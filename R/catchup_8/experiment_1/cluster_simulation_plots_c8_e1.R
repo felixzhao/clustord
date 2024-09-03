@@ -9,7 +9,7 @@ set.seed(123)
 source("R/catchup_8/experiment_1/OSM_Col_effect_functions.R")
 source("R/catchup_8/experiment_1/plots_functions.R")
 
-batch_plots <- function(para_list, para_name, cluster_probs){
+batch_plots <- function(para_list, para_name, cluster_probs, cluster_pi = c(0.5, 0.5)){
   plots_title <- paste(default_plots_title, para_name)
   save_path <- paste0(default_save_path,para_name,'.png')
   plots <- list()
@@ -56,9 +56,9 @@ G=2
 q=3
 alpha=c(-1,1)
 beta=c(0)
-mu=c(0.1, 0.2, 0.7)
-phi=c(0, 0.2, 1)
-cluster_pi = c(0.3, 0.7)
+mu=c(0, 0, 0)
+phi=c(0, 0.5, 1)
+cluster_pi = c(0.5, 0.5)
 sample_size <- 1000
 total_sample_size <- sample_size * G
 
@@ -68,17 +68,17 @@ default_plots_title <- "Density Plots of Categories for different value of"
 default_save_path <- "/Users/felixzhao/Documents/workspace/STAT489/report/images/para_sim/"
 
 reset_default_para_values <- function(){
-  G=2
-  q=3
-  alpha=c(-1,1)
-  beta=c(0)
-  mu=c(0.1, 0.2, 0.7)
-  phi=c(0, 0.2, 1)
-  cluster_pi = c(0.3, 0.7)
-  sample_size <- 1000
-  total_sample_size <- sample_size * G
+  G<<-2
+  q<<-3
+  alpha<<-c(-1,1)
+  beta<<-c(0)
+  mu<<-c(0, 0, 0)#c(0, 0.2, 0.7)
+  phi<<-c(0, 0.5, 1)
+  cluster_pi <<- c(0.5, 0.5)
+  sample_size <<- 1000
+  total_sample_size <<- sample_size * G
   
-  number_of_y = 1
+  number_of_y <<- 1
 }
 
 # batch plots
@@ -97,25 +97,25 @@ cluster_probs_list <- lapply(alpha_list, function(alpha) {
 batch_plots(alpha_list, 'alpha', cluster_probs_list)
 
 # beta
-reset_default_para_values()
-number_of_y = 10
-beta_list <- list(
-  c(-0.1, 0.1),
-  c(-1,1), 
-  c(-3,3)
-)
-cluster_probs_list <- lapply(alpha_list, function(alpha) {
-  generate_cluster_probs(G, q, alpha, beta, mu, phi, cluster_pi, 
-                         sample_size, total_sample_size, number_of_y)
-})
-batch_plots(alpha_list, 'alpha', cluster_probs_list)
+# reset_default_para_values()
+# number_of_y = 10
+# beta_list <- list(
+#   c(-0.1, 0.1),
+#   c(-1,1), 
+#   c(-3,3)
+# )
+# cluster_probs_list <- lapply(beta_list, function(beta) {
+#   generate_cluster_probs(G, q, alpha, beta, mu, phi, cluster_pi, 
+#                          sample_size, total_sample_size, number_of_y)
+# })
+# batch_plots(beta_list, 'beta', cluster_probs_list)
 
 # mu
 reset_default_para_values()
 mu_list <- list(
-  c(0.1, 0.3, 0.6)
-  ,c(0.3, 0.3, 0.3)
-  ,c(0.6, 0.3, 0.1)
+  c(0, -1, -2)
+  ,c(0, 2, 1)
+  ,c(0, 1, 2)
 )
 cluster_probs_list <- lapply(mu_list, function(mu) {
   generate_cluster_probs(G, q, alpha, beta, mu, phi, cluster_pi, 
@@ -149,9 +149,12 @@ pi_list <- list(
   ,c(0.5, 0.5)
   ,c(0.9, 0.1)
 )
-cluster_probs_list <- lapply(pi_list, function(cluster_pi) {
-  generate_cluster_probs(G, q, alpha, beta, mu, phi, cluster_pi, 
-                         sample_size, total_sample_size, number_of_y)
+
+cluster_probs <- generate_cluster_probs(G, q, alpha, beta, mu, phi, cluster_pi, 
+                       sample_size, total_sample_size, number_of_y)
+
+lapply(pi_list, function(cluster_pi_2) {
+  batch_plots(pi_list, 'pi', list(cluster_probs,cluster_probs,cluster_probs), cluster_pi_2)
 })
-batch_plots(pi_list, 'pi', cluster_probs_list)
+
 

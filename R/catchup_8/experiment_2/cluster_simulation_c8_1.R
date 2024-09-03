@@ -14,19 +14,7 @@ set.seed(123)
 G=2 # number of clusters
 q=3 # number of categories
 alpha= c(-1, 1) #c(1.5, 0, -1.5) 
-beta <- runif(20, min = -1, max = 1) # col effects # try (-3, 3), (-0.1, 0.1), without col effects
-
-# G=2
-# q=3
-# alpha=c(-1,1)
-# beta=c(0)
-# mu=c(0, 0, 0)
-# phi=c(0, 0.5, 1)
-# cluster_pi = c(0.5, 0.5)
-# sample_size <- 1000
-# total_sample_size <- sample_size * G
-
-
+beta <- runif(20, min = -1, max = 1) # col effects
 mu=c(0, 0.6, 0.3) 
 phi=c(0, 0.8, 1)
 cluster_pi = c(0.1, 0.3, 0.6)

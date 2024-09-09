@@ -153,8 +153,20 @@ pi_list <- list(
 cluster_probs <- generate_cluster_probs(G, q, alpha, beta, mu, phi, cluster_pi, 
                        sample_size, total_sample_size, number_of_y)
 
-lapply(pi_list, function(cluster_pi_2) {
-  batch_plots(pi_list, 'pi', list(cluster_probs,cluster_probs,cluster_probs), cluster_pi_2)
-})
+# plot pi
+para_list <- pi_list
+para_name <- "pi"
+plots_title <- paste(default_plots_title, para_name)
+save_path <- paste0(default_save_path,para_name,'.png')
+plots <- list()
+for (i in seq_along(para_list)) {
+  cur_alpha <- para_list[[i]]
+  desc = paste(para_name,": ",paste(cur_alpha, collapse = ", "))
+  sample_df <- data_samping(sample_size, total_sample_size, pi_list[[i]], q,
+                            cluster_probs, number_of_y)
+  plt_image <- plot_sample_bar(sample_df, desc=desc)
+  plots[[i]] <-plt_image
+}
+show_plots(plots, plots_title, save_path)
 
 

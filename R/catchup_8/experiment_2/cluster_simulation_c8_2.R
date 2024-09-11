@@ -7,23 +7,34 @@ library(grid)
 library(purrr)
 library(dplyr)
 
+source("R/catchup_8/experiment_2/osm_row_col_effect_functions.R")
+
 set.seed(123)
 
 # prob matrix for each Y, in current stage suppose all same.
 
-G=2 # number of clusters
-q=3 # number of categories
-alpha= c(-1, 1) #c(1.5, 0, -1.5) 
-beta <- runif(20, min = -1, max = 1) # col effects
-mu=c(0, 0.6, 0.3) 
-phi=c(0, 0.8, 1)
-cluster_pi = c(0.1, 0.3, 0.6)
-sample_size <- 2500
+G=2
+q=3
+alpha=c(-1,1)
+beta=c(0)
+delta=c(5)
+mu=c(0, 0, 0)
+phi=c(0, 0.5, 1)
+cluster_pi = c(0.5, 0.5)
+sample_size <- 5
 total_sample_size <- sample_size * G
 
-number_of_y = 20
+number_of_y = 1
 
-cluster_probs <- array(0,dim = c( G, number_of_y, q)) #lapply(1:G, function(x) numeric(q))
+X <- matrix(rnorm(1, mean = 0, sd = 1), nrow = total_sample_size, ncol = 1)
+number_of_row <- total_sample_size
+
+cluster_probs <- generate_cluster_probs(G, q, alpha, beta, mu, phi, cluster_pi, delta,
+sample_size, total_sample_size, number_of_y, number_of_row
+, X)
+
+
+# <- array(0,dim = c( G, number_of_y, q)) #lapply(1:G, function(x) numeric(q))
 
 for (g in 1:G) {
   #category_probs <- array() #list() #lapply(1:number_of_y, function(x) numeric(q))

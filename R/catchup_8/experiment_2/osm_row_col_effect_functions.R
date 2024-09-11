@@ -13,9 +13,9 @@ generate_cluster_probs <- function(G, q, alpha, beta, mu, phi, cluster_pi, delta
             for (k in 1:q) {
                 if (k > 1) {
                 linear <- mu[k] + phi[k] * (alpha[g] + beta[j] + sum(delta*X[i,]))
-                cluster_probs[g,j, k] <- exp(linear)
+                cluster_probs[g,i, j, k] <- exp(linear)
                 } else {
-                cluster_probs[g,j, k] <- 1
+                cluster_probs[g,i, j, k] <- 1
                 }
             }
             cluster_probs[g,i,j,] <- cluster_probs[g,i,j,] / sum(cluster_probs[g,i,j,])

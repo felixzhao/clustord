@@ -9,11 +9,11 @@ set.seed(123)
 # prob matrix for each Y, in current stage suppose all same.
 
 G=8 # number of clusters
-q=3 # number of categories
-alpha=c(2.5, 1.5, 1, 0, -1, -1.5, -2.5, -3.5) 
+q=3 # number of categories # may need to increase number cate
+alpha=c(3.5, 2.5, 1.5, 0.5, -0.5, -1.5, -2.5, -3.5) # must sum = zero, or one of them is 0
 mu=c(0, 0.6, 0.3) 
 phi=c(0, 0.8, 1)
-cluster_pi = c(0.1, 0.1, 0.1, 0.1, 0.15 ,0.15 ,0.15 , 0.15)
+cluster_pi = c(0.1, 0.1, 0.1, 0.1, 0.15 ,0.15 ,0.15 , 0.15) # sum = 1
 sample_size <- 2500
 total_sample_size <- sample_size * G
 

@@ -54,3 +54,20 @@ Prediction   1   2
                Accuracy : 0.9983     
                  95% CI : (0.9907, 1)
                  
+# experiment 4
+
+- 20 Ys
+- 3 clusters
+- same code and other parameters as previous exps
+
+## results
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2
+         1 263 157
+         2  11 198
+                                          
+               Accuracy : 0.7329          
+                 95% CI : (0.6965, 0.7671)

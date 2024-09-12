@@ -9,7 +9,7 @@ library(dplyr)
 
 set.seed(123)
 
-source("R/catchup_9/experiement_1/osm_col_effect_functions.R")
+source("R/catchup_9/osm_col_effect_functions.R")
 # prob matrix for each Y, in current stage suppose all same.
 
 # default parameters

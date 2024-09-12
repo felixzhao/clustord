@@ -12,7 +12,7 @@ library(grid)
 
 set.seed(123)
 
-source("R/catchup_9/experiement_1/osm_col_effect_functions.R")
+source("R/catchup_9/osm_col_effect_functions.R")
 
 # arguments
 number_of_y <- 20

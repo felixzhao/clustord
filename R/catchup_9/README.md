@@ -35,3 +35,22 @@ Prediction   1   2
                                           
                Accuracy : 0.9783          
                  95% CI : (0.9632, 0.9884)
+
+
+# expereimnt 3
+
+- 50 Ys
+- same code as exp 1 & 2
+
+## results
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2
+         1 297   0
+         2   1 302
+                                     
+               Accuracy : 0.9983     
+                 95% CI : (0.9907, 1)
+                 

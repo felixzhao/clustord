@@ -1,5 +1,6 @@
 # experiment 1
 
+- 20 Ys
 - default parameter as paper
 - col effect simulation and prediction
 - call funtion to generate prob matrix
@@ -14,3 +15,23 @@ Prediction   1   2
          2  15 293
                                           
                Accuracy : 0.96 
+
+
+# experiment 2
+
+- 30 Ys
+- use same code as exp 1
+- same parameters
+- beta uni(30, -1, 1)
+
+## results
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2
+         1 289   4
+         2   9 298
+                                          
+               Accuracy : 0.9783          
+                 95% CI : (0.9632, 0.9884)

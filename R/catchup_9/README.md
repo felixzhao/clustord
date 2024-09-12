@@ -58,6 +58,7 @@ Prediction   1   2
 
 - 20 Ys
 - 3 clusters
+- sample size 1500
 - same code and other parameters as previous exps
 
 ## results
@@ -66,8 +67,8 @@ Confusion Matrix and Statistics
 
           Reference
 Prediction   1   2
-         1 263 157
-         2  11 198
+         1 388 264
+         2  12 306
                                           
-               Accuracy : 0.7329          
-                 95% CI : (0.6965, 0.7671)
+               Accuracy : 0.7155          
+                 95% CI : (0.6859, 0.7437)

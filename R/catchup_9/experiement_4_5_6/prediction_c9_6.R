@@ -55,7 +55,7 @@ load_data <- function(data_path){
 training <- function(df, number_of_y){
   # training
   # Model Log(P(Y=k)/P(Y=1))=mu_k+phi_k*rowc_coef_r with 2 row clustering groups:
-  results <- clustord(Y~ROWCLUST+COL,model="OSM",2,long.df=df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=5)
+  results <- clustord(Y~ROWCLUST+COL,model="OSM",3,long.df=df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=5)
   
   
   parlist <- results$parlist.out
@@ -132,8 +132,8 @@ prediction <- function(test_Y, model_probs, cluster_pi){
 evaluation <- function(predicted, actual){
   # confusion matrix
   # Convert predicted and actual vectors to factors with the same levels
-  predicted <- factor(predicted, levels = c(1, 2))
-  actual <- factor(actual, levels = c(1, 2))
+  predicted <- factor(predicted, levels = c(1, 2, 3))
+  actual <- factor(actual, levels = c(1, 2, 3))
   
   # Calculate confusion matrix
   conf_matrix <- confusionMatrix(predicted, actual)

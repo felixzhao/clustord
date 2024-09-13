@@ -42,6 +42,9 @@ Prediction   1   2
 - 50 Ys
 - same code as exp 1 & 2
 
+## code
+./experiment_1_2_3/*
+
 ## results
 
 Confusion Matrix and Statistics
@@ -61,14 +64,20 @@ Prediction   1   2
 - sample size 1500
 - same code and other parameters as previous exps
 
+## code
+./experiment_4_5_6/*
+
 ## results
 
 Confusion Matrix and Statistics
 
           Reference
-Prediction   1   2
-         1 388 264
-         2  12 306
+Prediction   1   2   3
+         1 334  63   0
+         2 110 383 152
+         3   1  39 268
+
+Overall Statistics
                                           
-               Accuracy : 0.7155          
-                 95% CI : (0.6859, 0.7437)
+               Accuracy : 0.7296          
+                 95% CI : (0.7051, 0.7532)

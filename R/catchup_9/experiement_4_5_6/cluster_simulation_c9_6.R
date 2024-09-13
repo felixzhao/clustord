@@ -20,7 +20,7 @@ alpha <- c(-1,0,1)
 beta <- runif(number_of_y, min = -1, max = 1) #c(-1, -0.5, 0, 0.5, 1)
 mu <- c(0, 0, 0)
 phi <- c(0, 0.5, 1)
-cluster_pi <- c(0.3, 0.4, 0.3)
+cluster_pi <- c(0.33, 0.34, 0.33)
 sample_size <- 1500
 total_sample_size <- sample_size * G
 

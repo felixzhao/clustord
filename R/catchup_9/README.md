@@ -65,7 +65,7 @@ Prediction   1   2
 - same code and other parameters as previous exps
 
 ## code
-./experiment_4_5_6/*
+./experiment_4/*
 
 ## results
 

@@ -141,7 +141,7 @@ plot_all_y <- function(df, number_of_y, number_of_y_for_print=10, n_print_col=3)
 }
 
 # 10 Y
-save_path <- paste0("./data/simulation_y_",number_of_y,"_c9_6.csv")
+save_path <- paste0("./data/simulation_y_",number_of_y,"_c9_4.csv")
 
 df_10_y <- data_samping(sample_size, total_sample_size, cluster_pi, q, 
                          cluster_probs, number_of_y

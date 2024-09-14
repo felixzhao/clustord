@@ -16,7 +16,7 @@ source("R/catchup_9/osm_col_effect_functions.R")
 
 # arguments
 number_of_y <- 20
-df_path = paste0("./data/simulation_y_",number_of_y,"_c9_6.csv")
+df_path = paste0("./data/simulation_y_",number_of_y,"_c9_4.csv")
 
 # funtions
 ## read data

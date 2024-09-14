@@ -81,3 +81,31 @@ Overall Statistics
                                           
                Accuracy : 0.7296          
                  95% CI : (0.7051, 0.7532)
+
+
+# experiment 5
+
+- 20 Ys
+- 5 clusters 
+- sample size 2.5K
+- same logic as e4
+
+## code
+./experiment_5/*
+
+## result
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2   3   4   5
+         1   0   0   0   0   0
+         2 505 201  69   6   0
+         3   0   0   0   0   0
+         4 243 543 730 722 731
+         5   0   0   0   0   0
+
+Overall Statistics
+                                          
+               Accuracy : 0.2461          
+                 95% CI : (0.2324, 0.2602)

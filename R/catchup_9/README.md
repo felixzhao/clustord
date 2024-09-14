@@ -109,3 +109,16 @@ Overall Statistics
                                           
                Accuracy : 0.2461          
                  95% CI : (0.2324, 0.2602)
+
+# experiment 6
+
+- 20 Ys
+- 8 clusters 
+- sample size 5K
+- nstart 20
+- startEMcycles 2
+
+## code
+./experiment_6/*
+
+## result

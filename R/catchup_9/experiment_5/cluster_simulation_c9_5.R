@@ -73,27 +73,6 @@ data_samping <- function(sample_size, total_sample_size, cluster_pi, q,
   colnames(res2) <- c(paste0("Y",1:number_of_y), "cluster")
 
   return(res2)
-  
-  # dataframes <- 
-  #   
-  #   lapply(1:number_of_y, function(i) {
-  #   # col_cluster_probs <- cluster_probs[[]]
-  #   #   lapply(cluster_probs, function(cluster) {
-  #   #   sapply(cluster, function(sublist) sublist[i])
-  #   # })
-  #   y_sampling(sample_size, total_sample_size, cluster_pi, q, cluster_probs, i)
-  #   })
-  # 
-   # Merge all dataframes
-   # merged_df <- reduce(data_list, function(df1, df2) {
-   #   inner_join(df1, df2, by = c("cluster", "id"))
-   # })
-  
-   # Remove the unique identifier column
-   # merged_df <- res %>% select(-id)
-   # 
-   # return(merged_df)
-
 }
 
 save_data <- function(df, save_path = "./data/simulation_catgories_n_cluster_c9_1.csv"){
@@ -102,50 +81,11 @@ save_data <- function(df, save_path = "./data/simulation_catgories_n_cluster_c9_
   print(paste("Save data to",save_path,"Done."))
 }
 
-# Plot
-plot_y <- function(df, y_idx) {
-  sample_name <- paste0("Y", y_idx)
-  # Plot
-  data1 <- data.frame(Sample = df[[sample_name]], Cluster = as.factor(df$cluster))
-  
-  plot <- ggplot(data1, aes(x = Sample, fill = Cluster)) +
-    geom_density(alpha = 0.5) +
-    labs(title = sample_name,
-         x = "Sample Value",
-         y = "Density") +
-    scale_fill_brewer(palette = "Set1", name = "Cluster") +
-    theme_minimal()
-}
 
-plot_all_y <- function(df, number_of_y, number_of_y_for_print=10, n_print_col=3)  { 
-  # df <- df[,1:3]
-  plots <- list()
-  for (i in 1:number_of_y_for_print){
-    plots[[i]] <- plot_y(df, i)
-  }
-  
-  # Calculate number of rows and columns dynamically
-  ncol <- n_print_col # Number of columns in plot
-  nrow <- ceiling(number_of_y_for_print / ncol)  # Number of rows
-  
-  # Ensure the grid has enough cells
-  stopifnot(nrow * ncol >= length(plots))
-  
-  # Arrange the plots dynamically and add a title
-  grid.arrange(
-    grobs = plots,
-    ncol = ncol,
-    nrow = nrow,
-    top = textGrob(paste("TOP 10 of", number_of_y,"Y Density Plots by Categories"), 
-                   gp = gpar(fontsize = 16, fontface = "bold"))
-  )
-}
-
-# 10 Y
 save_path <- paste0("./data/simulation_y_",number_of_y,"_c9_5.csv")
 
-df_10_y <- data_samping(sample_size, total_sample_size, cluster_pi, q, 
+df_y <- data_samping(sample_size, total_sample_size, cluster_pi, q, 
                          cluster_probs, number_of_y
                          )
-# plot_all_y(df_10_y, number_of_y)
-save_data(df_10_y, save_path = save_path)
+
+save_data(df_y, save_path = save_path)

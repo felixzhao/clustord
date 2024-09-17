@@ -55,7 +55,7 @@ load_data <- function(data_path){
 training <- function(df, number_of_y){
   # training
   # Model Log(P(Y=k)/P(Y=1))=mu_k+phi_k*rowc_coef_r with 2 row clustering groups:
-  results <- clustord(Y~ROWCLUST+COL,model="OSM",5,long.df=df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=5)
+  results <- clustord(Y~ROWCLUST+COL,model="OSM",5,long.df=df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=20)
   
   
   parlist <- results$parlist.out
@@ -74,12 +74,6 @@ training <- function(df, number_of_y){
   probs <- get_cluster_prob_matrix(mu, phi, alpha, beta, cluster_pi, number_of_y)
   print("Cluster Prob matrix:")
   probs
-  
-  # col_clu_probs <- lapply(1:number_of_y, function(i) {
-  #        col_cluster_probs <-
-  #          lapply(probs, function(cluster) {
-  #              sapply(cluster, function(sublist) sublist[i])
-  #        })}) # g,j,k -> j,g,k
 
   return(list(probs=probs, cluster_pi=cluster_pi, model=results))
   
@@ -90,9 +84,6 @@ training <- function(df, number_of_y){
 z_prediction <- function(y_i, model_probs, cluster_pi) {
   row_probs <- lapply(1:length(y_i), function(x) numeric(length(cluster_pi)))
   for (j in 1: number_of_y) {
-    # col_probs <- model_probs[,j,]
-    # probs_matrix <- do.call(rbind, col_probs)
-    # Extract columns based on y values and combine into matrix p
     row_probs[[j]] <- t(sapply(y_i[j], function(k) model_probs[,j,k]))
   }
   
@@ -102,10 +93,6 @@ z_prediction <- function(y_i, model_probs, cluster_pi) {
   
   # Adjust each cluster's probabilities by multiplying with corresponding pi
   adjusted_z <- cluster_pi * z
-    
-  #   mapply(function(cluster, p) {
-  #   cluster * p
-  # }, z, cluster_pi, SIMPLIFY = FALSE)
   
   return(adjusted_z)
 }
@@ -160,19 +147,4 @@ evaluation <- function(predicted, actual){
   conf_matrix <- evaluation(predicted = predicted, actual = test_cluster)
 #}
 
-#conf_matrix <- main(df_path, number_of_y)
 print(conf_matrix)
-
-
-# n_of_y_list <- c(30, 50)
-# conf_matrix_list <- list()
-# 
-# for (number_of_y in n_of_y_list){
-#   print(number_of_y)
-#   
-#   data_path <- paste0("./data/simulation_y_",number_of_y,"_c4_1.csv")
-#   conf_matrix <- main(data_path)
-#   print(conf_matrix)
-#   conf_matrix_list[[paste(number_of_y)]] <- conf_matrix
-# }
-# 

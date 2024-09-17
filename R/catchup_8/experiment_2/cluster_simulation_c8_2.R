@@ -17,7 +17,7 @@ G=2
 q=3
 alpha=c(-1,1)
 beta=c(0)
-delta=c(5)
+delta= c(1) #c(5)
 mu=c(0, 0, 0)
 phi=c(0, 0.5, 1)
 cluster_pi = c(0.5, 0.5)
@@ -26,8 +26,9 @@ total_sample_size <- sample_size * G
 
 number_of_y = 1
 
-X <- matrix(rnorm(1, mean = 0, sd = 1), nrow = total_sample_size, ncol = 1)
+
 number_of_row <- total_sample_size
+X <- matrix(rnorm(number_of_row, mean = 0, sd = 1), nrow = number_of_row, ncol = 1)
 
 cluster_probs <- generate_cluster_probs(G, q, alpha, beta, mu, phi, cluster_pi, delta,
 sample_size, total_sample_size, number_of_y, number_of_row
@@ -36,29 +37,29 @@ sample_size, total_sample_size, number_of_y, number_of_row
 
 # <- array(0,dim = c( G, number_of_y, q)) #lapply(1:G, function(x) numeric(q))
 
-for (g in 1:G) {
-  #category_probs <- array() #list() #lapply(1:number_of_y, function(x) numeric(q))
-  for (j in 1: number_of_y) { # j loop must be out of k loop
-    #probs <- numeric(q)
-    for (k in 1:q) {
-      if (k > 1) {
-        linear <- mu[k] + phi[k] * (alpha[g] + beta[j])
-        cluster_probs[g,j, k] <- exp(linear)
-      } else {
-        cluster_probs[g,j, k] <- 1
-      }
-      # print(paste( g,k,j))
-      # print(paste( mu[k], phi[k], alpha[g], beta[j]))
-      # print(paste('linear', linear))
-    }
-    # print(paste('probs', probs))
-    # print(paste('norm probs', probs / sum(probs)))
-    cluster_probs[g,j,] <- cluster_probs[g,j,] / sum(cluster_probs[g,j,])
-    # category_probs[[j]] <- probs / sum(probs) # normalise k for each j # 2 dim, j, k
-  }
-  # sum_flattened_list <- sum(unlist(category_probs))
-  # cluster_probs[[g]] <- category_probs # 3 dim, g, j, k
-}
+# for (g in 1:G) {
+#   #category_probs <- array() #list() #lapply(1:number_of_y, function(x) numeric(q))
+#   for (j in 1: number_of_y) { # j loop must be out of k loop
+#     #probs <- numeric(q)
+#     for (k in 1:q) {
+#       if (k > 1) {
+#         linear <- mu[k] + phi[k] * (alpha[g] + beta[j])
+#         cluster_probs[g,j, k] <- exp(linear)
+#       } else {
+#         cluster_probs[g,j, k] <- 1
+#       }
+#       # print(paste( g,k,j))
+#       # print(paste( mu[k], phi[k], alpha[g], beta[j]))
+#       # print(paste('linear', linear))
+#     }
+#     # print(paste('probs', probs))
+#     # print(paste('norm probs', probs / sum(probs)))
+#     cluster_probs[g,j,] <- cluster_probs[g,j,] / sum(cluster_probs[g,j,])
+#     # category_probs[[j]] <- probs / sum(probs) # normalise k for each j # 2 dim, j, k
+#   }
+#   # sum_flattened_list <- sum(unlist(category_probs))
+#   # cluster_probs[[g]] <- category_probs # 3 dim, g, j, k
+# }
 
 # sampling
 

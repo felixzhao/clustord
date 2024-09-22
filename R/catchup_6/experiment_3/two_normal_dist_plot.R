@@ -30,6 +30,6 @@ ggplot(data_long, aes(x = x, y = Density, color = Distribution)) +
   ylab("Density") +
   theme_minimal() +
   scale_x_continuous(breaks = seq(floor(min(data$x)), ceiling(max(data$x)), by = 1)) +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "green", size = 1) +
-  geom_vline(xintercept = 2.5, linetype = "dashed", color = "orange", size = 1)
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black", size = 1) +
+  geom_vline(xintercept = 2.5, linetype = "dashed", color = "black", size = 1)
   

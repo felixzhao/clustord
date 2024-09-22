@@ -130,8 +130,8 @@ for (i in seq_along(beta_list)) {
   beta_plots[[i]] <- y_plots
 }
 
-for (i in seq_along(beta_list)){
-  print(i)
+for (beta_idx in seq_along(beta_list)){
+  print(beta_idx)
 
 
   # Extract Y-limits from all plots to determine the common range

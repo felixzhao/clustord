@@ -84,7 +84,7 @@ get_cluster_prob_matrix <- function(mu, phi, alpha, beta, cluster_pi, number_of_
 training <- function(df, number_of_y){
   # training
   # Model Log(P(Y=k)/P(Y=1))=mu_k+phi_k*rowc_coef_r with 5 row clustering groups:
-  results <- clustord(Y~ROWCLUST+COL,model="OSM",5,long.df=df, EM.control=list(EMcycles=100,startEMcycles=5), nstarts=20)
+  results <- clustord(Y~ROWCLUST+COL,model="OSM",5,long.df=df, EM.control=list(EMcycles=100,startEMcycles=2), nstarts=20)
   
 
   parlist <- results$parlist.out

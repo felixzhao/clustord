@@ -27,11 +27,11 @@ data_long <- pivot_longer(data, cols = starts_with("y"), names_to = "Distributio
 ggplot(data_long, aes(x = x, y = Density, color = Distribution)) +
   geom_line() +
   scale_color_manual(values = c("y1" = "blue", "y2" = "red", "y3" = "green", "y4" = "purple", "y5" = "orange"),
-                     labels = c(paste("Mean =", means[1], ", Var =", variance),
-                                paste("Mean =", means[2], ", Var =", variance),
-                                paste("Mean =", means[3], ", Var =", variance),
-                                paste("Mean =", means[4], ", Var =", variance),
-                                paste("Mean =", means[5], ", Var =", variance))) +
+                     labels = c(paste("Cluster 1,","Mean =", means[1], ", Var =", variance),
+                                paste("Cluster 2,","Mean =", means[2], ", Var =", variance),
+                                paste("Cluster 3,","Mean =", means[3], ", Var =", variance),
+                                paste("Cluster 4,","Mean =", means[4], ", Var =", variance),
+                                paste("Cluster 5,","Mean =", means[5], ", Var =", variance))) +
   ggtitle("Five Normal Distributions with Variance 1.5") +
   xlab("x") +
   ylab("Density") +

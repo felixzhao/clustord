@@ -74,13 +74,13 @@ variance <- 1.5
 sd <- sqrt(variance)
 
 # Function to generate cluster data
-generate_cluster_data <- function(n_y, n, mean, var, cluster_idx) {
-  data.frame(
-    x = rnorm(n_y, mean = mean, sd = sqrt(var)),
-    cluster = cluster_idx,
-    n = n
-  )
-}
+# generate_cluster_data <- function(n_y, n, mean, var, cluster_idx) {
+#   data.frame(
+#     x = rnorm(n_y, mean = mean, sd = sqrt(var)),
+#     cluster = cluster_idx,
+#     n = n
+#   )
+# }
 
 # Initialize an empty list to store clusters
 df_clusters <- list()

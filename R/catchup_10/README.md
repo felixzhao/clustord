@@ -66,3 +66,12 @@ Warning messages:
 
 - Distribution Simulation data generated.
 - init code, need to run 
+
+
+# experiment 3
+
+- Replicate
+
+## results
+
+- #TODO

@@ -71,6 +71,23 @@ Warning messages:
 # experiment 3
 
 - Replicate
+- base on catchup 9 experiment 1
+- use same parameters
+- random generate seed 
+- repeat experiment for 10 times
+- calculate std(ACC) to indicate replicate
+
+## comments
+
+- code: cluster_simulation_c10_3.R and prediction_c10_3.R are same as catchup_c9_1
+- replicate_c10_3.R is 
+  - combine the simulation and prediction code,
+  - skip save data to file
+  - add std Acc calcuate
+
+## code
+
+/R/catchup_10/experiment_3/replicate_c10_3.R
 
 ## results
 

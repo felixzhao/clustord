@@ -91,4 +91,9 @@ Warning messages:
 
 ## results
 
-- #TODO
+> print(accuracy_values)
+ [1] 0.9500000 0.9733333 0.9533333 0.9666667 0.9566667 0.9650000 0.9583333 0.9583333 0.9466667 0.9516667
+
+> # Print the standard deviation
+> print(accuracy_std)
+[1] 0.008270131

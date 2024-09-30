@@ -64,4 +64,5 @@ Warning messages:
 
 ## result
 
+- Distribution Simulation data generated.
 - init code, need to run 

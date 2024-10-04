@@ -64,8 +64,32 @@ Warning messages:
 
 ## result
 
-- Distribution Simulation data generated.
-- init code, need to run 
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2
+         1 748   0
+         2   0 744
+                                     
+               Accuracy : 1          
+                 95% CI : (0.9975, 1)
+    No Information Rate : 0.5013     
+    P-Value [Acc > NIR] : < 2.2e-16  
+                                     
+                  Kappa : 1          
+                                     
+ Mcnemar's Test P-Value : NA         
+                                     
+            Sensitivity : 1.0000     
+            Specificity : 1.0000     
+         Pos Pred Value : 1.0000     
+         Neg Pred Value : 1.0000     
+             Prevalence : 0.5013     
+         Detection Rate : 0.5013     
+   Detection Prevalence : 0.5013     
+      Balanced Accuracy : 1.0000     
+                                     
+       'Positive' Class : 1 
 
 
 # experiment 3

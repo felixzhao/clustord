@@ -91,6 +91,7 @@ Prediction   1   2
                                      
        'Positive' Class : 1 
 
+For got change the confusion matrix number, have to rerun
 
 # experiment 3
 

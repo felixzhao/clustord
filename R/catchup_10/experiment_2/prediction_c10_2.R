@@ -13,8 +13,11 @@ library(grid)
 set.seed(123)
 
 # arguments
+number_of_cluster <- 5
 number_of_y <- 100
 df_path = paste0("./data/dist_simulation_y_",number_of_y,"_c10_2.csv")
+
+model_save_path = paste0("./data/model_y_",number_of_y,"_c10_2.rds")
 
 # funtions
 ## read data
@@ -103,7 +106,7 @@ training <- function(df, number_of_y){
   print("Cluster Prob matrix:")
   probs
   
-  return(list(probs=probs, cluster_pi=cluster_pi))
+  return(list(probs=probs, cluster_pi=cluster_pi, results=results))
 
 }
 
@@ -143,9 +146,11 @@ prediction <- function(test_Y, probs, cluster_pi){
 ### evaluation 
 evaluation <- function(predicted, actual){
   # confusion matrix
+  levels <- seq(1:number_of_cluster)
+  print(levels)
   # Convert predicted and actual vectors to factors with the same levels
-  predicted <- factor(predicted, levels = c(1, 2))
-  actual <- factor(actual, levels = c(1, 2))
+  predicted <- factor(predicted, levels = levels)
+  actual <- factor(actual, levels = levels)
   
   # Calculate confusion matrix
   conf_matrix <- confusionMatrix(predicted, actual)
@@ -156,7 +161,7 @@ evaluation <- function(predicted, actual){
 
 # main
 
-main <- function(df_path, number_of_y){
+# main <- function(df_path, number_of_y){
   data_dfs <- load_data(df_path)
   train_df <- data_dfs$train_df
   test_Y <- data_dfs$test_Y
@@ -166,11 +171,14 @@ main <- function(df_path, number_of_y){
   
   probs <- model$probs
   cluster_pi <- model$cluster_pi
+  results <- model$results
+  
+  saveRDS(model, file=model_save_path)
   
   predicted <- prediction(test_Y = test_Y, probs = probs, cluster_pi = cluster_pi)
   
   conf_matrix <- evaluation(predicted = predicted, actual = test_cluster)
-}
+# }
 
 conf_matrix <- main(df_path, number_of_y)
 print(conf_matrix)

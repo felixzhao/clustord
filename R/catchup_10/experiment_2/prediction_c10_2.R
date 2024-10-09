@@ -180,7 +180,7 @@ evaluation <- function(predicted, actual){
   conf_matrix <- evaluation(predicted = predicted, actual = test_cluster)
 # }
 
-conf_matrix <- main(df_path, number_of_y)
+# conf_matrix <- main(df_path, number_of_y)
 print(conf_matrix)
 
 

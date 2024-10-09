@@ -67,31 +67,35 @@ Warning messages:
 Confusion Matrix and Statistics
 
           Reference
-Prediction   1   2
-         1 748   0
-         2   0 744
-                                     
-               Accuracy : 1          
-                 95% CI : (0.9975, 1)
-    No Information Rate : 0.5013     
-    P-Value [Acc > NIR] : < 2.2e-16  
-                                     
-                  Kappa : 1          
-                                     
- Mcnemar's Test P-Value : NA         
-                                     
-            Sensitivity : 1.0000     
-            Specificity : 1.0000     
-         Pos Pred Value : 1.0000     
-         Neg Pred Value : 1.0000     
-             Prevalence : 0.5013     
-         Detection Rate : 0.5013     
-   Detection Prevalence : 0.5013     
-      Balanced Accuracy : 1.0000     
-                                     
-       'Positive' Class : 1 
+Prediction   1   2   3   4   5
+         1 748   0   0   0   0
+         2   0 744   0   0   0
+         3   0   0 799   0   0
+         4   0   0   0 728   0
+         5   0   0   0   0 731
 
-For got change the confusion matrix number, have to rerun
+Overall Statistics
+                                    
+               Accuracy : 1         
+                 95% CI : (0.999, 1)
+    No Information Rate : 0.2131    
+    P-Value [Acc > NIR] : < 2.2e-16 
+                                    
+                  Kappa : 1         
+                                    
+ Mcnemar's Test P-Value : NA        
+
+Statistics by Class:
+
+                     Class: 1 Class: 2 Class: 3 Class: 4 Class: 5
+Sensitivity            1.0000   1.0000   1.0000   1.0000   1.0000
+Specificity            1.0000   1.0000   1.0000   1.0000   1.0000
+Pos Pred Value         1.0000   1.0000   1.0000   1.0000   1.0000
+Neg Pred Value         1.0000   1.0000   1.0000   1.0000   1.0000
+Prevalence             0.1995   0.1984   0.2131   0.1941   0.1949
+Detection Rate         0.1995   0.1984   0.2131   0.1941   0.1949
+Detection Prevalence   0.1995   0.1984   0.2131   0.1941   0.1949
+Balanced Accuracy      1.0000   1.0000   1.0000   1.0000   1.0000
 
 # experiment 3
 

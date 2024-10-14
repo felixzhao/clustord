@@ -53,7 +53,38 @@ Balanced Accuracy      0.9090   0.7614   0.8844
 ./experiment_2/*
 
 ## result
-TODO
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   1   2   3   4   5
+         1 725 546 276  50   2
+         2   0   0   0   0   0
+         3  23 197 508 562 363
+         4   0   0   0   0   0
+         5   0   1  15 116 366
+
+Overall Statistics
+                                          
+               Accuracy : 0.4264          
+                 95% CI : (0.4105, 0.4424)
+    No Information Rate : 0.2131          
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.2786          
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: 1 Class: 2 Class: 3 Class: 4 Class: 5
+Sensitivity            0.9693   0.0000   0.6358   0.0000   0.5007
+Specificity            0.7089   1.0000   0.6120   1.0000   0.9563
+Pos Pred Value         0.4534      NaN   0.3073      NaN   0.7349
+Neg Pred Value         0.9893   0.8016   0.8612   0.8059   0.8878
+Prevalence             0.1995   0.1984   0.2131   0.1941   0.1949
+Detection Rate         0.1933   0.0000   0.1355   0.0000   0.0976
+Detection Prevalence   0.4264   0.0000   0.4408   0.0000   0.1328
+Balanced Accuracy      0.8391   0.5000   0.6239   0.5000   0.7285
 
 # experiment 3
 

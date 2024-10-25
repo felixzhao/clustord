@@ -2,7 +2,7 @@
 
 - 30 Ys
 - 3 clusters
-- sample size 1500
+- sample size 1500 pre cluster
 - same code and other parameters as catchup 9 exp 1-3
 
 ## code
@@ -46,7 +46,7 @@ Balanced Accuracy      0.9090   0.7614   0.8844
 
 - 30 Ys
 - 5 clusters 
-- sample size 2.5K
+- sample size 2.5K pre cluster
 - same logic as previous expeirments
 
 ## code
@@ -90,7 +90,7 @@ Balanced Accuracy      0.8391   0.5000   0.6239   0.5000   0.7285
 
 - 50 Ys
 - 3 clusters
-- sample size 1500
+- sample size 1500 pre cluster
 - same code and other parameters as catchup 9 exp 1-3
 
 ## code
@@ -133,7 +133,7 @@ Balanced Accuracy      0.9520   0.8938   0.9274
 
 - 50 Ys
 - 5 clusters 
-- sample size 2.5K
+- sample size 2.5K pre cluster
 - same logic as previous expeirments
 
 ## code

@@ -2,12 +2,31 @@
 library(ggplot2)
 
 # Specify the means and variances
+## close
 mean1 <- 0
 variance1 <- 6
-sd1 <- sqrt(variance1)
-
 mean2 <- 3
 variance2 <- 8
+cut1 <- 0
+cut2 <- 2.5
+
+## medium
+mean1 <- -1
+variance1 <- 1
+mean2 <- 1.5
+variance2 <- 2
+cut1 <- -1
+cut2 <- 1
+
+## far
+mean1 <- 0
+variance1 <- 1
+mean2 <- 4
+variance2 <- 2
+cut1 <- 1
+cut2 <- 2.5
+
+sd1 <- sqrt(variance1)
 sd2 <- sqrt(variance2)
 
 # Create a data frame with x values and corresponding normal densities for both distributions
@@ -25,11 +44,20 @@ ggplot(data_long, aes(x = x, y = Density, color = Distribution)) +
   scale_color_manual(values = c("y1" = "blue", "y2" = "red"),
                      labels = c(paste("Mean =", mean1, ", Var =", variance1),
                                 paste("Mean =", mean2, ", Var =", variance2))) +
-  ggtitle("Two Normal Distributions") +
+  # ggtitle("Two Normal Distributions") +
   xlab("x") +
   ylab("Density") +
-  theme_minimal() +
+  theme_minimal()  +
+theme(
+  legend.title = element_text(size = 20),    # Increase legend title size
+  legend.text = element_text(size = 20),     # Increase legend text size
+  legend.key.size = unit(1.5, "lines"),       # Increase legend key size
+  legend.position = c(0.8, 0.8),
+  legend.background = element_rect(fill = "white", color = "black"),
+  axis.text.x = element_text(size = 14),
+  axis.title.x = element_text(size = 20)
+) +
   scale_x_continuous(breaks = seq(floor(min(data$x)), ceiling(max(data$x)), by = 1)) +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "black", size = 1) +
-  geom_vline(xintercept = 2.5, linetype = "dashed", color = "black", size = 1)
+  geom_vline(xintercept = cut1, linetype = "dashed", color = "black", size = 1) +
+  geom_vline(xintercept = cut2, linetype = "dashed", color = "black", size = 1)
   
